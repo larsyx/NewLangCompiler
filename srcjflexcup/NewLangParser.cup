@@ -1,0 +1,207 @@
+
+import VisitorPattern.Program.*;
+import VisitorPattern.Stat.*;
+import VisitorPattern.Expressions.*;
+import VisitorPattern.*;
+import VisitorPattern.Expressions.Const.*;
+import VisitorPattern.Program.IdInit.*;
+
+// Declare terminals and nonterminals in the grammar
+terminal MAIN, SEMI, COMMA, PIPE, VAR, AND, OR;
+terminal DEF, OUT, FOR, IF, ELSE, WHILE, TO, LOOP, READ, WRITE, WRITELN, LPAR, RPAR;
+terminal LBRAC, RBRAC, COLON, ASSIGN, RETURN,  THEN;
+terminal Exp PLUS, MINUS, TIMES, DIV, POW, STR_CONCAT, NOT, EQ, NE, LT, LE, GT, GE;
+terminal String STRING;
+terminal String_const STRING_CONST;
+terminal Identifier ID;
+terminal False_const FALSE;
+terminal True_const TRUE;
+terminal char CHAR;
+terminal boolean BOOL;
+terminal int INT;
+terminal float FLOAT;
+terminal Real_const REAL_CONST;
+terminal void VOID;
+terminal Integer_const INTEGER_CONST;
+terminal Char_const CHAR_CONST;
+
+nonterminal ProgramOp Program;
+nonterminal FunOp FunDecl, MainFunDecl;
+nonterminal Exp Expr;
+nonterminal AssignOp AssignStat;
+nonterminal WriteOp WriteStat;
+nonterminal ReadOp ReadStat;
+nonterminal ForOp ForStat;
+nonterminal BodyOp Body, Else;
+nonterminal WhileOp WhileStat;
+nonterminal StatOp Stat;
+nonterminal IfOp IfStat;
+nonterminal StatementList StatList;
+nonterminal VarDeclList VarDeclList;
+nonterminal VarDeclOp VarDecl;
+nonterminal ParDeclOp ParDecl;
+nonterminal String Type, TypeOrVoid;
+nonterminal ParamDeclList ParamDeclList, NonEmptyParamDeclList;
+nonterminal DeclList DeclList;
+nonterminal IdInitObblList IdInitObblList;
+nonterminal IdInitList IdInitList;
+nonterminal FunCallOp FunCall;
+nonterminal ExpressionList ExprList;
+nonterminal IdentifierList IdList;
+nonterminal Const Const;
+
+
+precedence left PLUS, MINUS, STR_CONCAT; 
+precedence left DIV, TIMES;
+precedence left OR;
+precedence left AND;
+precedence left NOT;
+precedence left NE, LT, LE, GT, GE , EQ;
+precedence right POW;
+precedence nonassoc FOR, IF, WHILE, LPAR, RETURN, ID;
+
+Program ::= DeclList:d1 MainFunDecl:m DeclList:d2 {: RESULT = new ProgramOp(d1,m,d2); :}
+;
+
+DeclList ::= VarDecl:v DeclList:dl      {: RESULT = new DeclList(v,dl); :}
+            | FunDecl:f DeclList:dl     {: RESULT = new DeclList(f,dl); :}
+            | /* empty */               {: RESULT = new DeclList(); :}
+;
+
+MainFunDecl ::= MAIN FunDecl:fd         {: fd.isMain(); RESULT = fd; :}
+;
+
+VarDecl ::= Type:i IdInitList:il SEMI       {: RESULT = new VarDeclOp(i,il); :}
+            | VAR IdInitObblList:il SEMI    {: RESULT = new VarDeclOp(il); :}
+;
+
+Type ::= INT                            {: RESULT = "int"; :}
+            | BOOL                      {: RESULT = "bool"; :}
+            | FLOAT                     {: RESULT = "float"; :}
+            |STRING                     {: RESULT = "string"; :}
+            | CHAR                      {: RESULT = "char"; :}
+;
+
+IdInitList ::= ID:i                                             {: RESULT = new IdInitList(new IdInit(i)); :}
+            | IdInitList:il COMMA ID:i                          {: RESULT = new IdInitList(new IdInit(i), il); :}
+            | ID:i ASSIGN Expr:e                                {: RESULT = new IdInitList(new IdInit(i, e)); :}
+            | IdInitList:il COMMA ID:i ASSIGN Expr:e            {: RESULT = new IdInitList(new IdInit(i,e), il); :}
+;
+
+IdInitObblList ::= ID:i ASSIGN Const:c                        {: RESULT = new IdInitObblList(new IdInit(i,c));:}
+            | IdInitObblList:il COMMA ID:i ASSIGN Const:c     {:  RESULT = new IdInitObblList(new IdInit(i,c), il); :}
+;
+
+Const ::= INTEGER_CONST:c               {: RESULT = c; :}
+            | REAL_CONST:c              {: RESULT = c; :}
+            | TRUE:c                    {: RESULT = c; :}
+            | FALSE:c                   {: RESULT = c; :}
+            | STRING_CONST:c            {: RESULT = c; :}
+            | CHAR_CONST:c              {: RESULT = c; :}
+;
+
+FunDecl ::= DEF ID:i LPAR ParamDeclList:pl RPAR COLON TypeOrVoid:tv Body:b {: RESULT = new FunOp(i,pl, tv, b); :}
+;
+
+Body ::= LBRAC VarDeclList:vl StatList:s RBRAC {: RESULT = new BodyOp(vl,s); :}
+;
+
+ParamDeclList ::= NonEmptyParamDeclList:n {: RESULT = n; :}
+            | /* empty */               {: RESULT = null; :}
+;
+
+NonEmptyParamDeclList ::= ParDecl:p     {: RESULT = new ParamDeclList(p); :}
+            | NonEmptyParamDeclList:n PIPE ParDecl:p {: RESULT = new ParamDeclList(p,n); :}
+;
+
+ParDecl ::= Type:t IdList:il            {: RESULT = new ParDeclOp("IN", t, il); :}
+            | OUT Type:t IdList:il      {: RESULT = new ParDeclOp("OUT", t, il); :}
+;
+
+TypeOrVoid ::= Type:t                   {: RESULT = t; :}
+            | VOID                      {: RESULT = "void"; :}
+;
+
+VarDeclList ::= /* empty */                 {: RESULT = new VarDeclList(); :}
+            | VarDecl:v VarDeclList:vl      {: RESULT = new VarDeclList(v,vl); :}
+;
+
+StatList ::= Stat:s StatList:sl {: RESULT = new StatementList(s,sl); :} | Stat:s {: RESULT = new StatementList(s); :}
+;
+
+
+Stat ::= IfStat:i                       {: RESULT = i; :}
+            | ForStat:fs                {: RESULT = fs; :}
+            | ReadStat:rs SEMI          {: RESULT = rs; :}
+            | WriteStat:ws SEMI         {: RESULT = ws; :}
+            | AssignStat:as SEMI        {: RESULT = as; :}
+            | WhileStat:ws              {: RESULT = ws; :}
+            | FunCall:fc SEMI           {: RESULT = fc; :}
+            | RETURN Expr:e SEMI        {: RESULT = new ReturnOp(e); :}
+            | RETURN SEMI               {: RESULT = new ReturnOp(); :}
+            | /* empty */
+;
+
+
+IfStat ::= IF Expr:e THEN Body:b Else:el {: RESULT = new IfOp(e,b,el); :}
+;
+
+Else ::= /* empty */                    {: RESULT = null; :}
+            | ELSE Body:b               {: RESULT = b; :}
+;
+
+WhileStat ::= WHILE Expr:i LOOP Body:b    {: RESULT = new WhileOp(i,b); :}
+;
+	
+ForStat ::= FOR ID:id ASSIGN INTEGER_CONST:i1 TO INTEGER_CONST:i2 LOOP Body:b    {: RESULT = new ForOp(id,i1,i2,b); :}
+;
+
+ReadStat ::= IdList:il READ STRING_CONST    //{: RESULT = new :}
+	        |  IdList:il READ           {: RESULT = new ReadOp(il); :}
+;
+
+IdList ::= ID:i                         {: RESULT = new IdentifierList(i); :}
+	        | IdList:il COMMA ID:i      {: RESULT = new IdentifierList(i,il); :}
+;
+
+WriteStat ::= LPAR ExprList:el RPAR WRITE   {: RESULT = new WriteOp(false, el); :}
+	       | LPAR ExprList:el RPAR WRITELN  {: RESULT = new WriteOp(true, el); :}
+;
+
+AssignStat ::=  IdList:il ASSIGN ExprList:el    {: RESULT = new AssignOp(il,el); :}
+;
+
+FunCall ::= ID:i LPAR ExprList:el RPAR    {: RESULT = new FunCallOp(i,el); :}
+	        | ID:i LPAR RPAR            {: RESULT = new FunCallOp(i); :}
+;
+
+ExprList ::= Expr:e                     {: RESULT = new ExpressionList(e); :}
+	        | Expr:e COMMA ExprList:el  {: RESULT = new ExpressionList(e,el); :}
+;
+	
+Expr ::= TRUE:t                         {: RESULT = t; :}
+            | FALSE:f                   {: RESULT = f; :}
+            | INTEGER_CONST:i           {: RESULT = i; :}
+            | REAL_CONST:real           {: RESULT = real; :}
+            | STRING_CONST:str          {: RESULT = str; :}
+            | CHAR_CONST:c              {: RESULT = c; :}
+            | ID: id                    {: RESULT = id; :}
+            | FunCall:f                 {: RESULT = f; :}
+            | Expr:e1 PLUS Expr:e2      {: RESULT = new AddOp(e1,e2); :}
+            | Expr:e1 MINUS Expr:e2     {: RESULT = new DivIntOp(e1,e2); :}
+            | Expr:e1 TIMES Expr:e2     {: RESULT = new MulOp(e1,e2); :}
+            | Expr:e1 DIV Expr:e2       {: RESULT = new DivOp(e1,e2); :}
+            | Expr:e1 AND Expr:e2       {: RESULT = new AndOp(e1,e2); :}
+            | Expr:e1 POW Expr:e2       {: RESULT = new PowOp(e1,e2); :}
+            | Expr:e1 STR_CONCAT Expr:e2    {: RESULT = new StrCatOp(e1,e2); :}
+            | Expr:e1 OR Expr:e2        {: RESULT = new OrOp(e1,e2); :}
+            | Expr:e1 GT Expr:e2        {: RESULT = new GTOp(e1,e2); :}
+            | Expr:e1 GE Expr:e2        {: RESULT = new GEOp(e1,e2); :}
+            | Expr:e1 LT Expr:e2        {: RESULT = new LTOp(e1,e2); :}
+            | Expr:e1 LE Expr:e2        {: RESULT = new LEOp(e1,e2); :}
+            | Expr:e1 EQ Expr:e2        {: RESULT = new EQOp(e1,e2); :}
+            | Expr:e1 NE Expr:e2        {: RESULT = new NEOp(e1,e2); :}
+            | MINUS Expr:e              {: RESULT = new UminusOp(e); :}
+            | NOT Expr:e                {: RESULT = new NotOp(e); :}
+            | LPAR Expr:e RPAR          {: RESULT = e; :}
+;

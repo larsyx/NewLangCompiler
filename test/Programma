@@ -1,0 +1,58 @@
+
+
+float op1, op2;
+
+def scegliOpzione(): integer {
+    integer opzione;
+
+    ("Scegli opzione: ") -->!;
+    ("opzione 1: somma ") -->!;
+    ("opzione 2: sottrazione") -->!;
+    ("opzione 3: prodotto") -->!;
+    ("opzione 4: divisione") -->!;
+    ("opzione 5: potenza") -->!;
+
+    opzione <--;
+
+}
+
+start:
+def main(): void {
+    var flag << 1;
+    while flag = 1 loop {
+        integer opzione << scegliOpzione();
+
+        float risultato << operazione(opzione);
+        ("Risultato operazione: " & risultato) -->!;
+
+        ("Vuoi fare un'altra operazione? (1:si 0:no): ") -->;
+        flag <-- ;
+    }
+}
+
+def operazione(integer opz ): float {
+    float risultato;
+
+    ("inserisci primo numero:") -->;
+    op1 <--;
+    ("inserisci secondo numero:") -->;
+    op2 <--;
+
+    if opz = 1 then {
+        risultato << op1 + op2;
+    }
+    if opz = 2 then {
+        risultato << op1 - op2;
+    }
+    if opz = 3 then {
+        risultato << op1 * op2;
+    }
+    if opz = 4 then {
+        risultato << op1 / op2;
+    }
+    if opz = 5 then {
+        return op1 ^ op2;
+    }
+
+    return risultato;
+}
