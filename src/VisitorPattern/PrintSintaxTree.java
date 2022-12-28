@@ -1,5 +1,6 @@
 package VisitorPattern;
 
+import SymbolTable.SemanticErrorException;
 import VisitorPattern.Expressions.*;
 import VisitorPattern.Expressions.Const.*;
 import VisitorPattern.Program.*;
@@ -11,9 +12,8 @@ import VisitorPattern.Stat.*;
 public class PrintSintaxTree implements Visitor{
 
 
-    String tree = "";
     //Program
-    public Object visit(BodyOp e) {
+    public Object visit(BodyOp e) throws SemanticErrorException {
         String str ="<BodyOp> \n";
 
         str += e.varDeclList.accept(this);
@@ -23,7 +23,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(FunOp e) {
+    public Object visit(FunOp e) throws SemanticErrorException {
         String str ="<FunOp> \n";
 
         str+= e.id.accept(this);
@@ -47,7 +47,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(ProgramOp e) {
+    public Object visit(ProgramOp e) throws SemanticErrorException {
         String str ="<ProgramOp> \n";
 
         str += e.declList_f.accept( this);
@@ -58,7 +58,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(DeclList e){
+    public Object visit(DeclList e) throws SemanticErrorException {
         String str= "<DeclList>\n";
 
         for(VarDeclOp o : e.varDeclList)
@@ -94,7 +94,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(ForOp e) {
+    public Object visit(ForOp e) throws SemanticErrorException {
         String str ="<ForOp> \n";
 
         str += e.id.accept(this);
@@ -117,7 +117,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(IfOp e) {
+    public Object visit(IfOp e) throws SemanticErrorException {
         String str ="<IfOp> \n";
 
         str += e.expression.accept(this);
@@ -148,7 +148,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(WhileOp e) {
+    public Object visit(WhileOp e) throws SemanticErrorException {
         String str ="<WhileOp> \n";
 
         str += e.expression.accept(this);
@@ -401,7 +401,7 @@ public class PrintSintaxTree implements Visitor{
     }
 
     @Override
-    public Object visit(ParamDeclList e) {
+    public Object visit(ParamDeclList e) throws SemanticErrorException {
         String str ="<ParamDeclList> \n";
 
         for(ParDeclOp op: e.parDeclOps)
@@ -412,7 +412,7 @@ public class PrintSintaxTree implements Visitor{
     }
 
     @Override
-    public Object visit(VarDeclList e) {
+    public Object visit(VarDeclList e) throws SemanticErrorException {
         String str ="<VarDeclList> \n";
 
         for(VarDeclOp op: e.varDeclOps)
@@ -459,7 +459,7 @@ public class PrintSintaxTree implements Visitor{
     }
 
     @Override
-    public Object visit(StatementList e) {
+    public Object visit(StatementList e) throws SemanticErrorException {
         String str ="<StmtList> \n";
 
         for(StatOp stmt: e.statList)

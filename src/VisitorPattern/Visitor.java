@@ -1,5 +1,6 @@
 package VisitorPattern;
 
+import SymbolTable.SemanticErrorException;
 import VisitorPattern.Expressions.*;
 import VisitorPattern.Expressions.Const.*;
 import VisitorPattern.Program.*;
@@ -11,32 +12,32 @@ import VisitorPattern.Stat.*;
 public interface Visitor {
 
     //Program
-    Object visit(BodyOp e);;
+    Object visit(BodyOp e) throws SemanticErrorException;;
 
-    Object visit(FunOp e);;
+    Object visit(FunOp e) throws SemanticErrorException;;
 
-    Object visit(ParDeclOp e);;
+    Object visit(ParDeclOp e) throws SemanticErrorException;;
 
-    Object visit(ProgramOp e);;
+    Object visit(ProgramOp e) throws SemanticErrorException;;
 
-    Object visit(DeclList e);;
-    Object visit(VarDeclOp e);;
+    Object visit(DeclList e) throws SemanticErrorException;;
+    Object visit(VarDeclOp e) throws SemanticErrorException;;
 
 
     //Statement
     Object visit(AssignOp e);
 
-    Object visit(ForOp e);
+    Object visit(ForOp e) throws SemanticErrorException;
 
     Object visit(FunCallOp e);
 
-    Object visit(IfOp e);
+    Object visit(IfOp e) throws SemanticErrorException;
 
     Object visit(ReadOp e);
 
     Object visit(ReturnOp e);
 
-    Object visit(WhileOp e);
+    Object visit(WhileOp e) throws SemanticErrorException;
 
     Object visit(WriteOp e);
 
@@ -90,14 +91,14 @@ public interface Visitor {
     Object visit(UminusOp e);
 
     // da implementare
-    Object visit(ParamDeclList e);
-    Object visit(VarDeclList e);
+    Object visit(ParamDeclList e) throws SemanticErrorException;
+    Object visit(VarDeclList e) throws SemanticErrorException;
 
     Object visit(IdInit e);
     Object visit(IdInitList e);
     Object visit(IdInitObblList e);
 
-    Object visit(StatementList e);
+    Object visit(StatementList e) throws SemanticErrorException;
 
     Object visit(IdentifierList e);
     Object visit(ExpressionList e);

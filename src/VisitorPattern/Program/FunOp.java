@@ -1,5 +1,6 @@
 package VisitorPattern.Program;
 
+import SymbolTable.SemanticErrorException;
 import VisitorPattern.Node;
 import VisitorPattern.Expressions.Identifier;
 import VisitorPattern.Visitor;
@@ -23,7 +24,7 @@ public class FunOp extends Node {
         this.isMain = true;
     }
 
-    public Object accept(Visitor v ){
+    public Object accept(Visitor v ) throws SemanticErrorException {
         return v.visit(this);
     }
 }

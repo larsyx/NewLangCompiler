@@ -1,6 +1,11 @@
-float x1,x2;
+float i,x2;
 
 start:
 def main(integer t,pp | float s | out string size): string {
+}
+
+def scegliOperazione(): void{
+
+    string i;
 }
 

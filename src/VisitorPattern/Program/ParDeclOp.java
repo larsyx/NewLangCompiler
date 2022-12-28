@@ -1,5 +1,6 @@
 package VisitorPattern.Program;
 
+import SymbolTable.SemanticErrorException;
 import VisitorPattern.Node;
 import VisitorPattern.Expressions.IdentifierList;
 import VisitorPattern.Visitor;
@@ -16,7 +17,7 @@ public class ParDeclOp extends Node {
     }
 
 
-    public Object accept(Visitor v ){
+    public Object accept(Visitor v ) throws SemanticErrorException {
         return v.visit(this);
     }
 

@@ -1,5 +1,6 @@
 package VisitorPattern.Stat;
 
+import SymbolTable.SemanticErrorException;
 import VisitorPattern.Program.BodyOp;
 import VisitorPattern.Node;
 import VisitorPattern.Expressions.Identifier;
@@ -19,7 +20,7 @@ public class ForOp extends Node implements StatOp {
         this.bodyOp = bodyOp;
     }
 
-    public Object accept(Visitor v ){
+    public Object accept(Visitor v ) throws SemanticErrorException {
         return v.visit(this);
     }
 }
