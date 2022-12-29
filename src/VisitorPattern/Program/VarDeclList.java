@@ -22,6 +22,9 @@ public class VarDeclList extends Node {
         this.addVarDeclOp(op);
     }
 
+    public void removeVarDeclOp(VarDeclOp op){
+        varDeclOps.remove(op);
+    }
     public void addVarDeclOp(VarDeclOp op){
         varDeclOps.add(op);
     }

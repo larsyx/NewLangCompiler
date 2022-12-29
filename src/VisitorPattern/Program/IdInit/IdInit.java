@@ -1,5 +1,6 @@
 package VisitorPattern.Program.IdInit;
 
+import SymbolTable.SemanticErrorException;
 import VisitorPattern.Node;
 import VisitorPattern.Expressions.Const.Const;
 import VisitorPattern.Expressions.Exp;
@@ -28,7 +29,7 @@ public class IdInit extends Node {
         this.assignConst = assign;
     }
 
-    public Object accept(Visitor v ){
+    public Object accept(Visitor v ) throws SemanticErrorException {
         return v.visit(this);
     }
 }

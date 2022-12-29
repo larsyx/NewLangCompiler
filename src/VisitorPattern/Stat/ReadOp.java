@@ -1,5 +1,6 @@
 package VisitorPattern.Stat;
 
+import SymbolTable.SemanticErrorException;
 import VisitorPattern.Node;
 import VisitorPattern.Expressions.Identifier;
 import VisitorPattern.Expressions.IdentifierList;
@@ -17,7 +18,7 @@ public class ReadOp extends Node implements StatOp{
         this.idList.addId(id);
     }
 
-    public Object accept(Visitor v ){
+    public Object accept(Visitor v ) throws SemanticErrorException {
         return v.visit(this);
     }
 }

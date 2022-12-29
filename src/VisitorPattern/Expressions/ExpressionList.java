@@ -1,5 +1,6 @@
 package VisitorPattern.Expressions;
 
+import SymbolTable.SemanticErrorException;
 import VisitorPattern.Visitor;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class ExpressionList {
         expList.add(0,exp);
     }
 
-    public Object accept(Visitor v ){
+    public Object accept(Visitor v ) throws SemanticErrorException {
         return v.visit(this);
     }
 }

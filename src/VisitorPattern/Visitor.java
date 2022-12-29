@@ -25,82 +25,82 @@ public interface Visitor {
 
 
     //Statement
-    Object visit(AssignOp e);
+    Object visit(AssignOp e) throws SemanticErrorException;
 
     Object visit(ForOp e) throws SemanticErrorException;
 
-    Object visit(FunCallOp e);
+    Object visit(FunCallOp e) throws SemanticErrorException;
 
     Object visit(IfOp e) throws SemanticErrorException;
 
-    Object visit(ReadOp e);
+    Object visit(ReadOp e) throws SemanticErrorException;
 
-    Object visit(ReturnOp e);
+    Object visit(ReturnOp e) throws SemanticErrorException;
 
     Object visit(WhileOp e) throws SemanticErrorException;
 
-    Object visit(WriteOp e);
+    Object visit(WriteOp e) throws SemanticErrorException;
 
     //Expressions
-    Object visit(AddOp e);
+    Object visit(AddOp e) throws SemanticErrorException;
 
-    Object visit(AndOp e);
+    Object visit(AndOp e) throws SemanticErrorException;
 
     Object visit(Char_const e);
 
-    Object visit(DiffOp e);
+    Object visit(DiffOp e) throws SemanticErrorException;
 
-    Object visit(DivIntOp e);
+    Object visit(DivIntOp e) throws SemanticErrorException;
 
-    Object visit(DivOp e);
+    Object visit(DivOp e) throws SemanticErrorException;
 
-    Object visit(EQOp e);
+    Object visit(EQOp e) throws SemanticErrorException;
 
     Object visit(False_const e);
 
-    Object visit(GEOp e);
+    Object visit(GEOp e) throws SemanticErrorException;
 
-    Object visit(GTOp e);
+    Object visit(GTOp e) throws SemanticErrorException;
 
-    Object visit(Identifier e);
+    Object visit(Identifier e) throws SemanticErrorException;
 
     Object visit(Integer_const e);
 
-    Object visit(LEOp e);
+    Object visit(LEOp e) throws SemanticErrorException;
 
-    Object visit(LTOp e);
+    Object visit(LTOp e) throws SemanticErrorException;
 
-    Object visit(MulOp e);
+    Object visit(MulOp e) throws SemanticErrorException;
 
-    Object visit(NEOp e);
+    Object visit(NEOp e) throws SemanticErrorException;
 
-    Object visit(NotOp e);
+    Object visit(NotOp e) throws SemanticErrorException;
 
-    Object visit(OrOp e);
+    Object visit(OrOp e) throws SemanticErrorException;
 
-    Object visit(PowOp e);
+    Object visit(PowOp e) throws SemanticErrorException;
 
     Object visit(Real_const e);
 
-    Object visit(StrCatOp e);
+    Object visit(StrCatOp e) throws SemanticErrorException;
 
     Object visit(String_const e);
 
     Object visit(True_const e);
 
-    Object visit(UminusOp e);
+    Object visit(UminusOp e) throws SemanticErrorException;
 
     // da implementare
     Object visit(ParamDeclList e) throws SemanticErrorException;
     Object visit(VarDeclList e) throws SemanticErrorException;
 
-    Object visit(IdInit e);
-    Object visit(IdInitList e);
-    Object visit(IdInitObblList e);
+    Object visit(IdInit e) throws SemanticErrorException;
+    Object visit(IdInitList e) throws SemanticErrorException;
+    Object visit(IdInitObblList e) throws SemanticErrorException;
 
     Object visit(StatementList e) throws SemanticErrorException;
 
-    Object visit(IdentifierList e);
-    Object visit(ExpressionList e);
+    Object visit(IdentifierList e) throws SemanticErrorException;
+    Object visit(ExpressionList e) throws SemanticErrorException;
 
 }

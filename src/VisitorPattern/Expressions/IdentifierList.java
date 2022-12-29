@@ -1,5 +1,6 @@
 package VisitorPattern.Expressions;
 
+import SymbolTable.SemanticErrorException;
 import VisitorPattern.Node;
 import VisitorPattern.Visitor;
 
@@ -25,7 +26,7 @@ public class IdentifierList extends Node {
         this.ids.add(0,id);
     }
 
-    public Object accept(Visitor v ){
+    public Object accept(Visitor v ) throws SemanticErrorException {
         return v.visit(this);
     }
 }

@@ -23,6 +23,10 @@ public class VarDeclOp extends Node {
         this.idList = idList;
     }
 
+    public void setVar(boolean var) {
+        isVar = var;
+    }
+
     public Object accept(Visitor v ) throws SemanticErrorException {
         return v.visit(this);
     }

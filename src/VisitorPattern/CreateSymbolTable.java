@@ -13,6 +13,7 @@ public class CreateSymbolTable implements Visitor{
 
     public ArrayList<SymbolTable> tables;
     public SymbolTable current;
+    public ArrayList<FunCallOp> funCall = new ArrayList<>();
 
     public CreateSymbolTable() {
         this.tables = new ArrayList<>();
@@ -74,7 +75,16 @@ public class CreateSymbolTable implements Visitor{
         e.main.accept( this);
         e.declList_s.accept(this);
 
+        checkFunCall();
+
         return st;
+    }
+
+    private void checkFunCall() throws SemanticErrorException {
+        for( FunCallOp in : funCall){
+            if(!current.findSymbol(in.id.attrib))
+                throw new SemanticErrorException("Non e stata dichiarata nessuna funzione: " + in.id.attrib);
+        }
     }
 
     public Object visit(DeclList e) throws SemanticErrorException {
@@ -90,7 +100,7 @@ public class CreateSymbolTable implements Visitor{
     public Object visit(VarDeclOp e) throws SemanticErrorException {
 
         NewLangSymbol symbol = null;
-        if(e.type!=null){
+        if(!e.isVar){
             IdInitList idlist = (IdInitList) e.idList;
             for (IdInit id : idlist.idInits) {
                 symbol = new NewLangSymbol(id.id.attrib, "var", e.type);
@@ -99,20 +109,39 @@ public class CreateSymbolTable implements Visitor{
                 current.addSymbol(symbol);
             }
         } else {
+            VarDeclList varDeclList = new VarDeclList();
+            IdInitList newList = new IdInitList();
+            String type;
             IdInitObblList idlist = (IdInitObblList) e.idList;
             for (IdInit id : idlist.idInits) {
-                symbol = new NewLangSymbol(id.id.attrib, "var", "var");
+                newList.addIdInit(new IdInit(id.id));
+                type = (String) id.assignConst.accept(this);
+                varDeclList.addVarDeclOp(new VarDeclOp(type,newList));
+                newList = new IdInitList();
+
+                symbol = new NewLangSymbol(id.id.attrib, "var", type);
                 if (current.isSymbolDuplication(symbol.getSymbol()))
                     throw new SemanticErrorException("Errore dichiarazione multipla di: " + symbol.getSymbol());
+                current.addSymbol(symbol);
+
             }
+            e.setVar(false);
+            e.idList=newList;
+
+            return varDeclList;
         }
 
 
         return current;
     }
 
+
     //Statement
-    public Object visit(AssignOp e) {
+    public Object visit(AssignOp e) throws SemanticErrorException {
+
+        e.idList.accept(this);
+        e.exprList.accept(this);
+
         return current;
     }
 
@@ -125,22 +154,23 @@ public class CreateSymbolTable implements Visitor{
 
         symbolTable.addSymbol(new NewLangSymbol(e.id.attrib, "var", "int"));
 
-
-
-        //e.intConst.accept(this);
-        //e.toIntConst.accept(this);
-
         e.bodyOp.accept(this);
 
         current = current.typeEnvironment;
         return current.typeEnvironment;
     }
 
-    public Object visit(FunCallOp e) {
+    public Object visit(FunCallOp e) throws SemanticErrorException {
+        if(e.exprList != null)
+            e.exprList.accept(this);
+        funCall.add(e);
+
         return current;
     }
 
     public Object visit(IfOp e) throws SemanticErrorException {
+
+        e.expression.accept(this);
 
         current.addSymbol(new NewLangSymbol("IfOp", "IfOp", "", "then"));
         SymbolTable symbolTable = new SymbolTable("IfOp", current);
@@ -166,15 +196,20 @@ public class CreateSymbolTable implements Visitor{
         return current.typeEnvironment;
     }
 
-    public Object visit(ReadOp e) {
+    public Object visit(ReadOp e) throws SemanticErrorException {
+        e.idList.accept(this);
         return current;
     }
 
-    public Object visit(ReturnOp e) {
+    public Object visit(ReturnOp e) throws SemanticErrorException {
+        if(e.expression != null)
+            e.expression.accept(this);
         return current;
     }
 
     public Object visit(WhileOp e) throws SemanticErrorException {
+
+        e.expression.accept(this);
 
         current.addSymbol(new NewLangSymbol("WhileOp", "WhileOp", ""));
 
@@ -190,105 +225,142 @@ public class CreateSymbolTable implements Visitor{
         return current.typeEnvironment;
     }
 
-    public Object visit(WriteOp e) {
+    public Object visit(WriteOp e) throws SemanticErrorException {
+
+        e.exprList.accept(this);
+
         return current;
      }
 
     //Expressions
-    public Object visit(AddOp e) {
+    public Object visit(AddOp e) throws SemanticErrorException {
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
-    public Object visit(AndOp e) {
+    public Object visit(AndOp e) throws SemanticErrorException {
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
     public Object visit(Char_const e) {
+        return "char";
+    }
+
+    public Object visit(DiffOp e) throws SemanticErrorException {
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
-    public Object visit(DiffOp e) {
+    public Object visit(DivIntOp e) throws SemanticErrorException {
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
-    public Object visit(DivIntOp e) {
+    public Object visit(DivOp e)throws SemanticErrorException{
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
-    public Object visit(DivOp e){
-        return current;
-    }
-
-    public Object visit(EQOp e) {
+    public Object visit(EQOp e) throws SemanticErrorException{
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
     public Object visit(False_const e) {
+        return "bool";
+    }
+
+    public Object visit(GEOp e) throws SemanticErrorException{
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
-    public Object visit(GEOp e) {
+    public Object visit(GTOp e) throws SemanticErrorException{
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
-    public Object visit(GTOp e) {
-        return current;
-    }
+    public Object visit(Identifier e) throws SemanticErrorException {
 
-    public Object visit(Identifier e) {
-
-        return current;
+        if(!SymbolTable.lookup(current, e.attrib))
+            throw new SemanticErrorException("Variabile non dichiarata: " + e.attrib);
+        return null;
     }
 
     public Object visit(Integer_const e) {
+        return "int";
+    }
+
+    public Object visit(LEOp e) throws SemanticErrorException{
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
-    public Object visit(LEOp e) {
+    public Object visit(LTOp e) throws SemanticErrorException{
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
-    public Object visit(LTOp e) {
+    public Object visit(MulOp e) throws SemanticErrorException{
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
-    public Object visit(MulOp e) {
+    public Object visit(NEOp e) throws SemanticErrorException{
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
-    public Object visit(NEOp e) {
+    public Object visit(NotOp e) throws SemanticErrorException{
+        e.exp.accept(this);
         return current;
     }
 
-    public Object visit(NotOp e) {
+    public Object visit(OrOp e) throws SemanticErrorException{
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
-    public Object visit(OrOp e) {
-        return current;
-    }
-
-    public Object visit(PowOp e) {
+    public Object visit(PowOp e) throws SemanticErrorException{
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
     public Object visit(Real_const e) {
-        return current;
+        return "float";
     }
 
-    public Object visit(StrCatOp e) {
+    public Object visit(StrCatOp e) throws SemanticErrorException{
+        e.left.accept(this);
+        e.right.accept(this);
         return current;
     }
 
     public Object visit(String_const e) {
-        return current;
+        return "string";
     }
 
     public Object visit(True_const e) {
-        return current;
+        return "bool";
     }
 
-    public Object visit(UminusOp e) {
+    public Object visit(UminusOp e) throws SemanticErrorException{
+        e.exp.accept(this);
         return current;
     }
 
@@ -304,8 +376,21 @@ public class CreateSymbolTable implements Visitor{
     @Override
     public Object visit(VarDeclList e) throws SemanticErrorException {
 
-        for(VarDeclOp op: e.varDeclOps)
-            op.accept(this);
+        VarDeclList newOp = new VarDeclList();
+        ArrayList<VarDeclOp> remove = new ArrayList<>();
+        for(VarDeclOp op: e.varDeclOps) {
+            if(op.isVar) {
+                remove.add(op);
+                newOp = (VarDeclList) op.accept(this);
+            }
+            else
+                op.accept(this);
+        }
+
+        for(VarDeclOp rem : remove)
+            e.removeVarDeclOp(rem);
+        for(VarDeclOp vp: newOp.varDeclOps)
+            e.addVarDeclOp(vp);
 
         return current;
     }
@@ -336,12 +421,19 @@ public class CreateSymbolTable implements Visitor{
     }
 
     @Override
-    public Object visit(IdentifierList e) {
+    public Object visit(IdentifierList e) throws SemanticErrorException {
+        for(Identifier i: e.ids)
+            if(i != null)
+                i.accept(this);
         return current;
     }
 
     @Override
-    public Object visit(ExpressionList e) {
+    public Object visit(ExpressionList e) throws SemanticErrorException {
+
+        for( Exp exp: e.expList)
+            exp.accept(this);
+
         return current;
     }
 

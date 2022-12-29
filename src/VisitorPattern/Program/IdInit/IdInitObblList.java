@@ -1,5 +1,6 @@
 package VisitorPattern.Program.IdInit;
 
+import SymbolTable.SemanticErrorException;
 import VisitorPattern.Node;
 import VisitorPattern.Visitor;
 
@@ -26,7 +27,7 @@ public class IdInitObblList extends Node implements InitList{
         idInits.add(0,id);
     }
 
-    public Object accept(Visitor v ){
+    public Object accept(Visitor v ) throws SemanticErrorException {
         return v.visit(this);
     }
 }

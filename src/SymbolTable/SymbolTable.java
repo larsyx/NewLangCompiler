@@ -20,13 +20,13 @@ public class SymbolTable {
         symbols.add(symbol);
     }
 
-    public NewLangSymbol findSymbol(NewLangSymbol symbol){
+    public boolean findSymbol(String symbol){
         for (NewLangSymbol sym : symbols){
-            if (sym == symbol){
-                return sym;
+            if (sym.getSymbol().equals(symbol)){
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     public boolean isSymbolDuplication(String identifier){
@@ -38,12 +38,12 @@ public class SymbolTable {
         return false;
     }
 
-    public static boolean lookup(SymbolTable symbols, NewLangSymbol symbol){
-        if(symbols.typeEnvironment == null)
+    public static boolean lookup(SymbolTable symbols, String symbol){
+        if(symbols == null)
             return false;
 
         for(NewLangSymbol sym : symbols.symbols)
-            if(sym.equals(symbol))
+            if(sym.getSymbol().equals(symbol))
                 return true;
 
         return lookup(symbols.typeEnvironment, symbol);

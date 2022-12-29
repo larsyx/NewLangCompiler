@@ -36,7 +36,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(ParDeclOp e) {
+    public Object visit(ParDeclOp e) throws SemanticErrorException {
         String str ="<ParDeclOp> \n";
 
         str += "<InOrOut> \n" + e.outOrIn + "\n</InOrOut> \n";
@@ -70,7 +70,7 @@ public class PrintSintaxTree implements Visitor{
         str += "\n</DeclList>\n";
         return str;
     }
-    public Object visit(VarDeclOp e) {
+    public Object visit(VarDeclOp e) throws SemanticErrorException {
         String str ="<VarDeclOp> \n";
 
         if(e.type!=null)
@@ -84,7 +84,7 @@ public class PrintSintaxTree implements Visitor{
     }
 
     //Statement
-    public Object visit(AssignOp e) {
+    public Object visit(AssignOp e) throws SemanticErrorException {
         String str ="<AssignOp> \n";
 
         str += e.idList.accept(this);
@@ -106,7 +106,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(FunCallOp e) {
+    public Object visit(FunCallOp e) throws SemanticErrorException {
         String str ="<FunCallOp> \n";
 
         str += e.id.accept(this);
@@ -129,7 +129,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(ReadOp e) {
+    public Object visit(ReadOp e) throws SemanticErrorException {
         String str ="<ReadOp> \n";
 
         for(Identifier i: e.idList.ids)
@@ -139,7 +139,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(ReturnOp e) {
+    public Object visit(ReturnOp e) throws SemanticErrorException {
         String str ="<ReturnOp> \n";
 
         str += e.expression.accept(this);
@@ -158,7 +158,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(WriteOp e) {
+    public Object visit(WriteOp e) throws SemanticErrorException {
         String str ="<WriteOp> \n";
 
         str += "<Writeln> "+ e.newLine + " </Writeln> \n";
@@ -169,7 +169,7 @@ public class PrintSintaxTree implements Visitor{
     }
 
     //Expressions
-    public Object visit(AddOp e) {
+    public Object visit(AddOp e) throws SemanticErrorException {
         String str ="<AddOp> \n";
 
         str += e.left.accept(this);
@@ -179,7 +179,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(AndOp e) {
+    public Object visit(AndOp e) throws SemanticErrorException {
         String str ="<AndOp> \n";
 
         str += e.left.accept(this);
@@ -198,7 +198,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(DiffOp e) {
+    public Object visit(DiffOp e) throws SemanticErrorException {
         String str ="<DiffOp> \n";
 
         str += e.left.accept(this);
@@ -208,7 +208,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(DivIntOp e) {
+    public Object visit(DivIntOp e) throws SemanticErrorException {
         String str ="<DivIntOp> \n";
 
         str += e.left.accept(this);
@@ -218,7 +218,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(DivOp e){
+    public Object visit(DivOp e) throws SemanticErrorException {
         String str ="<DivOp> \n";
 
         str += e.left.accept(this);
@@ -228,7 +228,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(EQOp e) {
+    public Object visit(EQOp e) throws SemanticErrorException {
         String str ="<EQOp> \n";
 
         str += e.left.accept(this);
@@ -247,7 +247,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(GEOp e) {
+    public Object visit(GEOp e) throws SemanticErrorException {
         String str ="<GEOp> \n";
 
         str += e.left.accept(this);
@@ -257,7 +257,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(GTOp e) {
+    public Object visit(GTOp e) throws SemanticErrorException {
         String str ="<GTOp> \n";
 
         str += e.left.accept(this);
@@ -285,7 +285,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(LEOp e) {
+    public Object visit(LEOp e) throws SemanticErrorException {
         String str ="<LEOp> \n";
 
         str += e.left.accept(this);
@@ -295,7 +295,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(LTOp e) {
+    public Object visit(LTOp e) throws SemanticErrorException {
         String str ="<LTOp> \n";
 
         str += e.left.accept(this);
@@ -305,7 +305,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(MulOp e) {
+    public Object visit(MulOp e) throws SemanticErrorException {
         String str ="<MulOp> \n";
 
         str += e.left.accept(this);
@@ -315,7 +315,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(NEOp e) {
+    public Object visit(NEOp e) throws SemanticErrorException {
         String str ="<NEOp> \n";
 
         str += e.left.accept(this);
@@ -325,7 +325,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(NotOp e) {
+    public Object visit(NotOp e) throws SemanticErrorException {
         String str ="<NotOp> \n";
 
         str += e.exp.accept(this);
@@ -334,7 +334,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(OrOp e) {
+    public Object visit(OrOp e) throws SemanticErrorException {
         String str ="<OrOp> \n";
 
         str += e.left.accept(this);
@@ -344,7 +344,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(PowOp e) {
+    public Object visit(PowOp e) throws SemanticErrorException {
         String str ="<PowOp> \n";
 
         str += e.left.accept(this);
@@ -363,7 +363,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(StrCatOp e) {
+    public Object visit(StrCatOp e) throws SemanticErrorException {
         String str ="<StrCatOp> \n";
 
         str += e.left.accept(this);
@@ -391,7 +391,7 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(UminusOp e) {
+    public Object visit(UminusOp e) throws SemanticErrorException {
         String str ="<UminusOp> \n";
 
         str += e.exp.accept(this);
@@ -423,7 +423,7 @@ public class PrintSintaxTree implements Visitor{
     }
 
     @Override
-    public Object visit(IdInit e) {
+    public Object visit(IdInit e) throws SemanticErrorException {
         String str ="<IdInit> \n";
 
         str += e.id.accept(this);
@@ -437,7 +437,7 @@ public class PrintSintaxTree implements Visitor{
     }
 
     @Override
-    public Object visit(IdInitList e) {
+    public Object visit(IdInitList e) throws SemanticErrorException {
         String str ="\n<IdInitList> \n";
 
         for(IdInit idInit: e.idInits)
@@ -448,7 +448,7 @@ public class PrintSintaxTree implements Visitor{
     }
 
     @Override
-    public Object visit(IdInitObblList e) {
+    public Object visit(IdInitObblList e) throws SemanticErrorException {
         String str ="<IdInitObblList> \n";
 
         for(IdInit idInit: e.idInits)
@@ -471,7 +471,7 @@ public class PrintSintaxTree implements Visitor{
     }
 
     @Override
-    public Object visit(IdentifierList e) {
+    public Object visit(IdentifierList e) throws SemanticErrorException {
         String str ="<IdList> \n";
 
         for(Identifier id: e.ids)
@@ -482,7 +482,7 @@ public class PrintSintaxTree implements Visitor{
     }
 
     @Override
-    public Object visit(ExpressionList e) {
+    public Object visit(ExpressionList e) throws SemanticErrorException {
         String str ="<ExpressionList> \n";
 
         for(Exp exp: e.expList)
