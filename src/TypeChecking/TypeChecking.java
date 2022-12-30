@@ -493,13 +493,16 @@ public class TypeChecking implements Visitor {
                 if(op.exprList != null)
                     throw new SemanticErrorException("errore paramentri chiamata funzione");
             }
-            else if(fun.paramDeclList.parDeclOps.size() == op.exprList.expList.size()){
-                ParDeclOp declop= fun.paramDeclList.parDeclOps.get(0);
+            else if(op.exprList == null ) {
+                throw new SemanticErrorException("errore paramentri chiamata funzione");
+            }
+            else if(fun.paramDeclList.parDeclOps.size() == op.exprList.expList.size()) {
+                ParDeclOp declop = fun.paramDeclList.parDeclOps.get(0);
                 Exp exp = op.exprList.expList.get(0);
-                for(int i = 0; i < fun.paramDeclList.parDeclOps.size(); declop = fun.paramDeclList.parDeclOps.get(i), exp = op.exprList.expList.get(i))
-
-                    if(!declop.id.getType_node().equals(exp.accept(this)))
+                for (int i = 0; i < fun.paramDeclList.parDeclOps.size(); declop = fun.paramDeclList.parDeclOps.get(i), exp = op.exprList.expList.get(i), i++)
+                    if (!declop.accept(this).equals(exp.accept(this)))
                         throw new SemanticErrorException("errore parametri chiamata funzione");
+
             }
         }
     }
