@@ -1,11 +1,12 @@
 package VisitorPattern.Expressions;
 
 import SymbolTable.SemanticErrorException;
+import VisitorPattern.Node;
 import VisitorPattern.Visitor;
 
 import java.util.ArrayList;
 
-public class ExpressionList {
+public class ExpressionList extends Node {
     public ArrayList<Exp> expList;
 
     public ExpressionList(Exp exp){

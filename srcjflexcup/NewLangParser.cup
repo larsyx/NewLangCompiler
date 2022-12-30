@@ -75,7 +75,7 @@ VarDecl ::= Type:i IdInitList:il SEMI       {: RESULT = new VarDeclOp(i,il); :}
             | VAR IdInitObblList:il SEMI    {: RESULT = new VarDeclOp(il); :}
 ;
 
-Type ::= INT                            {: RESULT = "int"; :}
+Type ::= INT                            {: RESULT = "integer"; :}
             | BOOL                      {: RESULT = "bool"; :}
             | FLOAT                     {: RESULT = "float"; :}
             |STRING                     {: RESULT = "string"; :}

@@ -2,25 +2,28 @@ float f;
 
 
 start:
-def main(integer t,pp | float s | out string size): string {
-    f <<1;
+def main(integer t,pp | float s | out string size): void {
+    var tp << 4.5;
+    f << 1.5;
+
     for i << 1 to 10 loop {
-        i << f + 1 ;
+        f <<  s + f ;
         scegliOperazione();
     }
+    return ;
 }
 
 def scegliOperazione(): void{
     var int << 12, f << "ciao";
     string i;
+    i << "ciao";
+    return;
 }
 
-def scegliOperazionep(): void{
+def scegliOperazionep(): integer{
     var int << 12, f << "ciao";
 
     string i;
-    i,f << "ciao" , 12,5 +1 ;
-    scegliOperazionep();
-
+    return int;
 }
 

@@ -108,9 +108,10 @@ public class CreateSymbolTable implements Visitor {
                 if (current.isSymbolDuplication(symbol.getSymbol()))
                     throw new SemanticErrorException("Errore dichiarazione multipla di: " + symbol.getSymbol());
                 current.addSymbol(symbol);
+                id.id.setType_node(e.type);                            //asegnazione type per type checking
             }
         } else {
-            VarDeclList varDeclList = new VarDeclList();
+            VarDeclList varDeclList = new VarDeclList();            //gestione inferenza var
             IdInitList newList = new IdInitList();
             String type;
             IdInitObblList idlist = (IdInitObblList) e.idList;
@@ -124,7 +125,7 @@ public class CreateSymbolTable implements Visitor {
                 if (current.isSymbolDuplication(symbol.getSymbol()))
                     throw new SemanticErrorException("Errore dichiarazione multipla di: " + symbol.getSymbol());
                 current.addSymbol(symbol);
-
+                id.id.setType_node(type);                           //asegnazione type per type checking
             }
             e.setVar(false);
             e.idList=newList;
@@ -148,6 +149,8 @@ public class CreateSymbolTable implements Visitor {
 
     public Object visit(ForOp e) throws SemanticErrorException {
         current.addSymbol(new NewLangSymbol("forOp", "forOp", "", "from " + e.intConst.attrib + "to " + e.toIntConst.attrib));
+        e.intConst.accept(this);
+        e.toIntConst.accept(this);
 
         SymbolTable symbolTable = new SymbolTable("forOp", current);
         tables.add(symbolTable);

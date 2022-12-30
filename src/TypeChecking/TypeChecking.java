@@ -8,6 +8,7 @@ import VisitorPattern.Program.*;
 import VisitorPattern.Program.IdInit.IdInit;
 import VisitorPattern.Program.IdInit.IdInitList;
 import VisitorPattern.Program.IdInit.IdInitObblList;
+import VisitorPattern.Program.IdInit.InitList;
 import VisitorPattern.Stat.*;
 import VisitorPattern.Visitor;
 
@@ -21,6 +22,8 @@ public class TypeChecking implements Visitor {
     public static final String FLOAT = "float";
     public static final String CHAR= "char";
     public static final String STRING = "string";
+
+    public String resultType;
 
     @Override
     public Object visit(BodyOp e) throws SemanticErrorException {
@@ -36,12 +39,27 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(FunOp e) throws SemanticErrorException {
-        return null;
+        //manca parametri
+
+        e.body.accept(this);
+
+        if(resultType == null) {
+            e.setType_node(ERROR);
+            throw new SemanticErrorException("return non presente");
+        }
+        if(!resultType.equals(e.type)){
+            e.setType_node(ERROR);
+            throw new SemanticErrorException("Tipo di ritorno non corrisponde con firma della funzione");
+        }
+
+        resultType = null;
+        e.setType_node(NOTYPE);
+        return NOTYPE;
     }
 
     @Override
     public Object visit(ParDeclOp e) throws SemanticErrorException {
-        return null;
+        return NOTYPE;      //da implementare
     }
 
     @Override
@@ -77,7 +95,13 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(VarDeclOp e) throws SemanticErrorException {
+        if(e.type.equals(e.idList.accept(this))){
+            e.setType_node(NOTYPE);
+            return NOTYPE;
+        }
 
+        e.setType_node(ERROR);
+        throw new SemanticErrorException("errore dichiarazione variabili ");
     }
 
     //statement
@@ -91,10 +115,10 @@ public class TypeChecking implements Visitor {
         //controllo corrispondenza i-esima assegnazione
         Identifier id = e.idList.ids.get(0);
         Exp exp = e.exprList.expList.get(0);
-        for(int i = e.idList.ids.size() ; i < e.idList.ids.size(); id = e.idList.ids.get(i), exp = e.exprList.expList.get(i))
+        for(int i = 0 ; i < e.idList.ids.size(); id = e.idList.ids.get(i), exp = e.exprList.expList.get(i), i++)
             if(!id.accept(this).equals(exp.accept(this))) {
                 e.setType_node(ERROR);
-                throw new SemanticErrorException("Errore assegnazione: " + id.attrib + " e " + exp.toString());
+                throw new SemanticErrorException("Errore assegnazione: " + id.attrib + " e " + exp.accept(this));
             }
 
         e.setType_node(NOTYPE);
@@ -119,7 +143,7 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(FunCallOp e) throws SemanticErrorException {
-        return null;
+        return NOTYPE;              //da implementare
     }
 
     @Override
@@ -153,7 +177,13 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(ReturnOp e) throws SemanticErrorException {
-        return null;
+        if(e.expression == null)
+            resultType = "void";
+        else
+            resultType = (String) e.expression.accept(this);
+
+        e.setType_node(NOTYPE);
+        return NOTYPE;
     }
 
     @Override
@@ -353,41 +383,73 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(ParamDeclList e) throws SemanticErrorException {
-        return null;
+        return NOTYPE;                                  //da implementare
     }
 
     @Override
     public Object visit(VarDeclList e) throws SemanticErrorException {
-        return null;
+        for (VarDeclOp op : e.varDeclOps){
+            if(!op.accept(this).equals(NOTYPE)){
+                e.setType_node(ERROR);
+                throw new SemanticErrorException("errore VarDeclList");
+            }
+        }
+        e.setType_node(NOTYPE);
+        return NOTYPE;
     }
 
     @Override
     public Object visit(IdInit e) throws SemanticErrorException {
-        return null;
+        return e.id.accept(this);
     }
 
     @Override
     public Object visit(IdInitList e) throws SemanticErrorException {
-        return null;
+        String result = (String) e.idInits.get(0).accept(this);
+        for(IdInit idInit: e.idInits)      //solo idInitList perchè l'inferenza è stata gestita nella creazione della tabella dei simboli
+            if(!result.equals(idInit.accept(this))){
+                e.setType_node(ERROR);
+                throw new SemanticErrorException("errore inizializazione variabili");
+            }
+
+        e.setType_node(result);
+        return result;
     }
 
     @Override
     public Object visit(IdInitObblList e) throws SemanticErrorException {
-        return null;
+        return NOTYPE;
     }
 
     @Override
     public Object visit(StatementList e) throws SemanticErrorException {
-        return null;
+
+        for(StatOp op : e.statList) {
+            if(op!=null)
+                if (!op.accept(this).equals(NOTYPE)) {
+                   e.setType_node(ERROR);
+                   throw new SemanticErrorException("errore statementlist");
+                }
+        }
+        e.setType_node(NOTYPE);
+        return NOTYPE;
+
     }
 
     @Override
     public Object visit(IdentifierList e) throws SemanticErrorException {
-        return null;
+        for(Identifier i : e.ids)
+            i.accept(this);
+        e.setType_node(NOTYPE);
+        return NOTYPE;
     }
 
     @Override
     public Object visit(ExpressionList e) throws SemanticErrorException {
-        return null;
+        for(Exp exp : e.expList){
+            exp.accept(this);
+        }
+        e.setType_node(NOTYPE);
+        return NOTYPE;
     }
 }

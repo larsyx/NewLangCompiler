@@ -574,7 +574,7 @@ class CUP$parser$actions {
           case 8: // Type ::= INT 
             {
               String RESULT =null;
-		 RESULT = "int"; 
+		 RESULT = "integer"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("Type",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

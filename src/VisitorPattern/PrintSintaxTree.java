@@ -142,7 +142,8 @@ public class PrintSintaxTree implements Visitor{
     public Object visit(ReturnOp e) throws SemanticErrorException {
         String str ="<ReturnOp> \n";
 
-        str += e.expression.accept(this);
+        if(e.expression !=null)
+            str += e.expression.accept(this);
 
         str +="\n</ReturnOp> \n";
         return str;
