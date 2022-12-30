@@ -8,7 +8,7 @@ def main(integer t,pp | float s | out string size): void {
 
     for i << 1 to 10 loop {
         f <<  s + f ;
-        tp << scegliOperazionep();
+        tp << 1 + scegliOperazionep();
     }
     return ;
 }
@@ -20,7 +20,7 @@ def scegliOperazione(integer it): void{
     return;
 }
 
-def scegliOperazionep(): integer{
+def scegliOperazionep(): float {
     var int << 12, f << "ciao";
 
     string i;

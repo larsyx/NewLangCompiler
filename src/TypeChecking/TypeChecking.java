@@ -50,8 +50,6 @@ public class TypeChecking implements Visitor {
     @Override
     public Object visit(FunOp e) throws SemanticErrorException {
 
-        funOps.put(e.id.attrib, e);
-
         if(e.paramDeclList != null)
             e.paramDeclList.accept(this);
 
@@ -73,6 +71,7 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(ParDeclOp e) throws SemanticErrorException {
+
         String type = (String) e.id.ids.get(0).accept(this);
         for(Identifier i: e.id.ids)
             if (!i.accept(this).equals(type)){
@@ -86,6 +85,8 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(ProgramOp e) throws SemanticErrorException {
+        saveFunOp(e);
+
         if(e.declList_f.accept(this).equals(NOTYPE) && e.main.accept(this).equals(NOTYPE) && e.declList_s.accept(this).equals(NOTYPE)){
             e.setType_node(NOTYPE);
             return NOTYPE;
@@ -171,7 +172,7 @@ public class TypeChecking implements Visitor {
         if(e.exprList != null)
             e.exprList.accept(this);
 
-        return NOTYPE;              //da implementare
+        return funOps.get(e.id.attrib).type;              //da implementare
     }
 
     @Override
@@ -505,5 +506,15 @@ public class TypeChecking implements Visitor {
 
             }
         }
+    }
+
+    private void saveFunOp(ProgramOp op){
+        funOps.put(op.main.type,op.main);
+        if(op.declList_f.funDeclList!=null)
+            for(FunOp fun: op.declList_f.funDeclList)
+                funOps.put(fun.id.attrib,fun);
+        if(op.declList_s.funDeclList!=null)
+            for(FunOp fun: op.declList_s.funDeclList)
+                funOps.put(fun.id.attrib,fun);
     }
 }
