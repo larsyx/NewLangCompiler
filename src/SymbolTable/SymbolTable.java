@@ -38,13 +38,13 @@ public class SymbolTable {
         return false;
     }
 
-    public static boolean lookup(SymbolTable symbols, String symbol){
+    public static String lookup(SymbolTable symbols, String symbol){
         if(symbols == null)
-            return false;
+            return null;
 
         for(NewLangSymbol sym : symbols.symbols)
             if(sym.getSymbol().equals(symbol))
-                return true;
+                return sym.getType();
 
         return lookup(symbols.typeEnvironment, symbol);
     }

@@ -17,8 +17,10 @@ def scegliOperazione(): void{
 
 def scegliOperazionep(): void{
     var int << 12, f << "ciao";
+
     string i;
-    scegliOperazionepp();
+    i,f << "ciao" , 12,5 +1 ;
+    scegliOperazionep();
 
 }
 

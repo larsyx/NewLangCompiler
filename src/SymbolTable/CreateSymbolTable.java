@@ -1,4 +1,4 @@
-package VisitorPattern;
+package SymbolTable;
 
 import SymbolTable.*;
 import VisitorPattern.Expressions.*;
@@ -6,10 +6,11 @@ import VisitorPattern.Expressions.Const.*;
 import VisitorPattern.Program.*;
 import VisitorPattern.Program.IdInit.*;
 import VisitorPattern.Stat.*;
+import VisitorPattern.Visitor;
 
 import java.util.ArrayList;
 
-public class CreateSymbolTable implements Visitor{
+public class CreateSymbolTable implements Visitor {
 
     public ArrayList<SymbolTable> tables;
     public SymbolTable current;
@@ -152,7 +153,7 @@ public class CreateSymbolTable implements Visitor{
         tables.add(symbolTable);
         current = symbolTable;
 
-        symbolTable.addSymbol(new NewLangSymbol(e.id.attrib, "var", "int"));
+        symbolTable.addSymbol(new NewLangSymbol(e.id.attrib, "var", "integer"));
 
         e.bodyOp.accept(this);
 
@@ -246,6 +247,8 @@ public class CreateSymbolTable implements Visitor{
     }
 
     public Object visit(Char_const e) {
+
+        e.setType_node("char");
         return "char";
     }
 
@@ -274,7 +277,9 @@ public class CreateSymbolTable implements Visitor{
     }
 
     public Object visit(False_const e) {
-        return "bool";
+
+        e.setType_node("boolean");
+        return "boolean";
     }
 
     public Object visit(GEOp e) throws SemanticErrorException{
@@ -291,13 +296,18 @@ public class CreateSymbolTable implements Visitor{
 
     public Object visit(Identifier e) throws SemanticErrorException {
 
-        if(!SymbolTable.lookup(current, e.attrib))
+        String type_node = "";
+        type_node = SymbolTable.lookup(current, e.attrib);
+        if(type_node == null)
             throw new SemanticErrorException("Variabile non dichiarata: " + e.attrib);
-        return null;
+
+        e.setType_node(type_node);
+        return current;
     }
 
     public Object visit(Integer_const e) {
-        return "int";
+        e.setType_node("integer");
+        return "integer";
     }
 
     public Object visit(LEOp e) throws SemanticErrorException{
@@ -342,6 +352,7 @@ public class CreateSymbolTable implements Visitor{
     }
 
     public Object visit(Real_const e) {
+        e.setType_node("float");
         return "float";
     }
 
@@ -352,11 +363,15 @@ public class CreateSymbolTable implements Visitor{
     }
 
     public Object visit(String_const e) {
+
+        e.setType_node("string");
         return "string";
     }
 
     public Object visit(True_const e) {
-        return "bool";
+
+        e.setType_node("boolean");
+        return "boolean";
     }
 
     public Object visit(UminusOp e) throws SemanticErrorException{

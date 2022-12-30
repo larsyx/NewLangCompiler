@@ -2,13 +2,12 @@ package main;
 
 import Parser.Lexer;
 import Parser.parser;
-import VisitorPattern.CreateSymbolTable;
+import SymbolTable.CreateSymbolTable;
 import VisitorPattern.PrintSintaxTree;
 import VisitorPattern.Program.ProgramOp;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.logging.Logger;
 
 public class NewLangStarter {
 
@@ -19,7 +18,7 @@ public class NewLangStarter {
             ProgramOp op = (ProgramOp) p.parse().value;
             PrintSintaxTree t = new PrintSintaxTree();
             String result = (String) op.accept(t) ;
-            System.out.println(result);
+            //System.out.println(result);
 
             CreateSymbolTable cst = new CreateSymbolTable();
             op.accept(cst);
