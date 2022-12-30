@@ -59,6 +59,7 @@ public class CreateSymbolTable implements Visitor {
             if(current.isSymbolDuplication(symbol.getSymbol()))
                 throw new SemanticErrorException("Errore dichiarazione multipla di: " + symbol.getSymbol());
             current.addSymbol(symbol);
+            id.setType_node(e.type);
         }
         return current;
     }

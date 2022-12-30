@@ -28,7 +28,7 @@ public class NewLangStarter {
 
             TypeChecking tc = new TypeChecking();
             op.accept(tc);
-
+            tc.checkFunCallParam();
             String str = "";
 
         } catch (FileNotFoundException e) {

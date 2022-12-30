@@ -12,6 +12,9 @@ import VisitorPattern.Program.IdInit.InitList;
 import VisitorPattern.Stat.*;
 import VisitorPattern.Visitor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class TypeChecking implements Visitor {
 
@@ -24,6 +27,13 @@ public class TypeChecking implements Visitor {
     public static final String STRING = "string";
 
     public String resultType;
+    public HashMap<String,FunOp> funOps;
+    public ArrayList<FunCallOp> funCallOps;
+
+    public TypeChecking() {
+        funOps = new HashMap<>();
+        funCallOps = new ArrayList<>();
+    }
 
     @Override
     public Object visit(BodyOp e) throws SemanticErrorException {
@@ -39,7 +49,11 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(FunOp e) throws SemanticErrorException {
-        //manca parametri
+
+        funOps.put(e.id.attrib, e);
+
+        if(e.paramDeclList != null)
+            e.paramDeclList.accept(this);
 
         e.body.accept(this);
 
@@ -59,7 +73,15 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(ParDeclOp e) throws SemanticErrorException {
-        return NOTYPE;      //da implementare
+        String type = (String) e.id.ids.get(0).accept(this);
+        for(Identifier i: e.id.ids)
+            if (!i.accept(this).equals(type)){
+                e.setType_node(ERROR);
+                throw new SemanticErrorException("ParDeclOp tipi non uguali");
+            }
+
+        e.setType_node(type);
+        return type;
     }
 
     @Override
@@ -143,6 +165,12 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(FunCallOp e) throws SemanticErrorException {
+
+        funCallOps.add(e);
+
+        if(e.exprList != null)
+            e.exprList.accept(this);
+
         return NOTYPE;              //da implementare
     }
 
@@ -383,7 +411,10 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(ParamDeclList e) throws SemanticErrorException {
-        return NOTYPE;                                  //da implementare
+
+        for(ParDeclOp op : e.parDeclOps)
+            op.accept(this);
+        return NOTYPE;
     }
 
     @Override
@@ -451,5 +482,25 @@ public class TypeChecking implements Visitor {
         }
         e.setType_node(NOTYPE);
         return NOTYPE;
+    }
+
+
+
+    public void checkFunCallParam() throws SemanticErrorException {
+        for(FunCallOp op : funCallOps){
+            FunOp fun = funOps.get(op.id.attrib);
+            if(fun.paramDeclList == null ) {
+                if(op.exprList != null)
+                    throw new SemanticErrorException("errore paramentri chiamata funzione");
+            }
+            else if(fun.paramDeclList.parDeclOps.size() == op.exprList.expList.size()){
+                ParDeclOp declop= fun.paramDeclList.parDeclOps.get(0);
+                Exp exp = op.exprList.expList.get(0);
+                for(int i = 0; i < fun.paramDeclList.parDeclOps.size(); declop = fun.paramDeclList.parDeclOps.get(i), exp = op.exprList.expList.get(i))
+
+                    if(!declop.id.getType_node().equals(exp.accept(this)))
+                        throw new SemanticErrorException("errore parametri chiamata funzione");
+            }
+        }
     }
 }
