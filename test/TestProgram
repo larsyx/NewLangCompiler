@@ -20,10 +20,11 @@ def scegliOperazione(integer it): void{
     return;
 }
 
-def scegliOperazionep(): float {
+def scegliOperazionep(): integer {
     var int << 12, f << "ciao";
-
     string i;
+
+    scegliOperazione(12);
     return int;
 }
 

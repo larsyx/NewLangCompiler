@@ -172,14 +172,14 @@ public class TypeChecking implements Visitor {
         if(e.exprList != null)
             e.exprList.accept(this);
 
-        return funOps.get(e.id.attrib).type;              //da implementare
+        return funOps.get(e.id.attrib).type;
     }
 
     @Override
     public Object visit(IfOp e) throws SemanticErrorException {
-        if(!e.expression.accept(this).equals(NOTYPE)){
+        if(e.expression.accept(this).equals(ERROR)){
             e.setType_node(ERROR);
-            throw new SemanticErrorException("Errore Body For");
+            throw new SemanticErrorException("Errore Body if");
         }
 
         if(!e.body.accept(this).equals(NOTYPE)) {
@@ -217,7 +217,7 @@ public class TypeChecking implements Visitor {
 
     @Override
     public Object visit(WhileOp e) throws SemanticErrorException {
-        if(!e.expression.equals(BOOLEAN)){
+        if(!e.expression.accept(this).equals(BOOLEAN)){
             e.setType_node(ERROR);
             throw new SemanticErrorException("Errore espressione while non boolean");
         }
@@ -458,7 +458,7 @@ public class TypeChecking implements Visitor {
 
         for(StatOp op : e.statList) {
             if(op!=null)
-                if (!op.accept(this).equals(NOTYPE)) {
+                if (op.accept(this).equals(ERROR)) {
                    e.setType_node(ERROR);
                    throw new SemanticErrorException("errore statementlist");
                 }

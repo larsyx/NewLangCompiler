@@ -90,7 +90,7 @@ public interface Visitor {
 
     Object visit(UminusOp e) throws SemanticErrorException;
 
-    // da implementare
+
     Object visit(ParamDeclList e) throws SemanticErrorException;
     Object visit(VarDeclList e) throws SemanticErrorException;
 

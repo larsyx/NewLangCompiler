@@ -14,6 +14,7 @@ def scegliOpzione(): integer {
 
     opzione <--;
 
+    return opzione;
 }
 
 start:
@@ -22,12 +23,14 @@ def main(): void {
     while flag = 1 loop {
         integer opzione << scegliOpzione();
 
-        float risultato << operazione(opzione);
+        float risultato;
+        risultato << operazione(opzione);
         ("Risultato operazione: " & risultato) -->!;
 
         ("Vuoi fare un'altra operazione? (1:si 0:no): ") -->;
         flag <-- ;
     }
+    return;
 }
 
 def operazione(integer opz ): float {
