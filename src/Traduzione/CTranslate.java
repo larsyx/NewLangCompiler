@@ -3,6 +3,7 @@ package Traduzione;
 import SymbolTable.SemanticErrorException;
 import VisitorPattern.Expressions.*;
 import VisitorPattern.Expressions.Const.*;
+import VisitorPattern.Node;
 import VisitorPattern.Program.*;
 import VisitorPattern.Program.IdInit.IdInit;
 import VisitorPattern.Program.IdInit.IdInitList;
@@ -10,8 +11,12 @@ import VisitorPattern.Program.IdInit.IdInitObblList;
 import VisitorPattern.Stat.*;
 import VisitorPattern.Visitor;
 
+import java.util.ArrayList;
+
 public class CTranslate implements Visitor {
 
+    private boolean isWriting = false;
+    private boolean noSemi = false;
     //Program
     public Object visit(BodyOp e) throws SemanticErrorException {
         String str ="{\n";
@@ -83,8 +88,9 @@ public class CTranslate implements Visitor {
         str += "#include <math.h>\n";
 
         str += e.declList_f.accept( this);
-        str += e.main.accept( this);
         str += e.declList_s.accept(this);
+
+        str += e.main.accept( this);
 
         str +="\n";
         return str;
@@ -93,9 +99,13 @@ public class CTranslate implements Visitor {
     public Object visit(DeclList e) throws SemanticErrorException {
         String str= "\n";
 
-        for(VarDeclOp o : e.varDeclList)
-            str += o.accept(this);
-
+        for(VarDeclOp o : e.varDeclList) {
+            String temp = (String) o.accept(this);
+            if(temp.substring(temp.length()-1,temp.length()).compareTo(";")!=0)
+                str += temp.substring(0, temp.length()-1);
+            else
+                str += temp;
+        }
         for(FunOp o : e.funDeclList)
             str += o.accept(this);
 
@@ -109,7 +119,7 @@ public class CTranslate implements Visitor {
         if(e.type!=null) {
             String tipo = convertiTipi(e.type);
             if(tipo.equals(STRING)){
-                str += "" + CHAR + " = ";
+                str += "" + CHAR + "";
                 IdInitList list = (IdInitList) e.idList;
                 for (IdInit i : ((IdInitList) e.idList).idInits) {
                     str += " " + i.id.attrib + "[1000] ";
@@ -124,7 +134,7 @@ public class CTranslate implements Visitor {
 
             str += "" + tipo + " ";
             str += e.idList.accept(this);
-
+            str+= ";";
             str +="\n";
             return str;
         }else
@@ -141,7 +151,7 @@ public class CTranslate implements Visitor {
         str += id.attrib;
         str += " =";
         str += ex.accept(this);
-        if(str.substring(str.length()-1,str.length()).compareTo(";")!=0)
+        if(str.substring(str.length()-1,str.length()).compareTo(";")!=0 && str.substring(str.length()-2,str.length()-1).compareTo(";")!=0 && str.substring(str.length()-3,str.length()-2).compareTo(";")!=0)
             str += ";\n";
         for(int i= 1; i < e.idList.ids.size(); i++, ex = e.exprList.expList.get(i), id = e.idList.ids.get(i)){
             str += id.attrib;
@@ -251,9 +261,41 @@ public class CTranslate implements Visitor {
 
     public Object visit(WriteOp e) throws SemanticErrorException {
         String str =" ";
-        str = "printf(";
-        str += e.exprList.accept(this);
-        str = str.substring(0, str.length()-1);
+        isWriting = true;
+        str = "printf(\"";
+        ArrayList<Integer> esclusione= new ArrayList<>();
+        int i=0;
+        for( String tipo : (ArrayList<String>) e.exprList.accept(this)){
+            //Gestire costanti
+            switch (tipo) {
+                case CHAR:
+                case STRING:
+                    str += "%s";
+                    break;
+                case INTEGERNEW:
+                    str += "%d";
+                    break;
+                case FLOAT:
+                    str += "%f";
+                    break;
+                default:
+                    str += tipo;
+                    esclusione.add(i);
+                    break;
+            }
+            i++;
+        }
+        if(e.newLine)
+            str += "\\n";
+        str += "\"";
+        isWriting = false;
+        i=0;
+        for(Exp exp: e.exprList.expList){
+            if(!esclusione.contains(i))
+                str += "," + exp.accept(this);
+            i++;
+        }
+
         str +=");";
         return str;
     }
@@ -261,6 +303,9 @@ public class CTranslate implements Visitor {
     //Expressions
     public Object visit(AddOp e) throws SemanticErrorException {
         String str =" ";
+
+        if(isWriting)
+            return e.getType_node();
 
         str += e.left.accept(this);
         str += "+";
@@ -273,6 +318,9 @@ public class CTranslate implements Visitor {
     public Object visit(AndOp e) throws SemanticErrorException {
         String str =" ";
 
+        if(isWriting)
+            return e.getType_node();
+
         str += e.left.accept(this);
         str += "&&";
         str += e.right.accept(this);
@@ -284,6 +332,7 @@ public class CTranslate implements Visitor {
     public Object visit(Char_const e) {
         String str =" ";
 
+
         str += e.attrib;
 
         str +=" ";
@@ -292,6 +341,9 @@ public class CTranslate implements Visitor {
 
     public Object visit(DiffOp e) throws SemanticErrorException {
         String str =" ";
+
+        if(isWriting)
+            return e.getType_node();
 
         str += e.left.accept(this);
         str += "-";
@@ -304,6 +356,9 @@ public class CTranslate implements Visitor {
     public Object visit(DivIntOp e) throws SemanticErrorException {
         String str =" ";
 
+        if(isWriting)
+            return e.getType_node();
+
         str += e.left.accept(this);
         str += "-";
         str += e.right.accept(this);
@@ -313,6 +368,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(DivOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str =" ";
 
         str += e.left.accept(this);
@@ -324,6 +383,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(EQOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str =" ";
 
         str += e.left.accept(this);
@@ -335,6 +398,8 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(False_const e) {
+
+
         String str =" ";
 
         str += "" + e.false_const;
@@ -344,6 +409,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(GEOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str =" ";
 
         str += e.left.accept(this);
@@ -355,6 +424,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(GTOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str =" ";
 
         str += e.left.accept(this);
@@ -366,6 +439,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(Identifier e) {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str =" ";
 
         str += e.attrib;
@@ -375,6 +452,7 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(Integer_const e) {
+
         String str =" ";
 
         str += e.attrib;
@@ -384,6 +462,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(LEOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str =" ";
 
         str += e.left.accept(this);
@@ -395,6 +477,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(LTOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str =" ";
 
         str += e.left.accept(this);
@@ -406,6 +492,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(MulOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str =" ";
 
         str += e.left.accept(this);
@@ -417,6 +507,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(NEOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str ="<NEOp> \n";
 
         str += e.left.accept(this);
@@ -427,6 +521,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(NotOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str ="!";
 
         str += e.exp.accept(this);
@@ -436,6 +534,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(OrOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str =" ";
 
         str += e.left.accept(this);
@@ -447,6 +549,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(PowOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str =" ";
 
         str = "pow(";
@@ -459,6 +565,8 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(Real_const e) {
+
+
         String str =" ";
 
         str += "" + e.attrib;
@@ -468,6 +576,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(StrCatOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return STRING;
+
         String str ="";
         str += "strcat(";
         str += e.left.accept(this);
@@ -479,8 +591,11 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(String_const e) {
+
         String str =" ";
 
+        if(isWriting)
+            return e.attrib.substring(1, e.attrib.length()-1);
         str += e.attrib;
 
         str +=" ";
@@ -488,6 +603,7 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(True_const e) {
+
         String str =" ";
 
         str += "" + e.true_const;
@@ -497,6 +613,10 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(UminusOp e) throws SemanticErrorException {
+
+        if(isWriting)
+            return e.getType_node();
+
         String str ="-";
 
         str += e.exp.accept(this);
@@ -533,10 +653,14 @@ public class CTranslate implements Visitor {
 
         str += e.id.accept(this);
         if(e.assign != null)
-            str += e.assign.accept(this);
+            str += " = " + e.assign.accept(this);
         if(e.assignConst !=null)
             str += e.assignConst.accept(this);
 
+        if(str.substring(str.length()-1,str.length()).compareTo(";")==0)
+            str = str.substring(0, str.length()-1);
+        else if(str.substring(str.length()-2,str.length()-1).compareTo(";")==0)
+            str = str.substring(0, str.length()-2);
         str += "";
         return str;
     }
@@ -588,10 +712,16 @@ public class CTranslate implements Visitor {
     public Object visit(ExpressionList e) throws SemanticErrorException {
         String str ="";
 
+        if(isWriting) {
+            ArrayList<String> tipi= new ArrayList<>();
+            for(Exp exp: e.expList)
+                tipi.add((String) exp.accept(this));
+            return tipi;
+        }
         for(Exp exp: e.expList)
             str += exp.accept(this) + " ";
 
-        str += "\n";
+        str += " ";
         return str;
     }
 

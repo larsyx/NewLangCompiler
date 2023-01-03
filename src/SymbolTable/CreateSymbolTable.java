@@ -117,7 +117,7 @@ public class CreateSymbolTable implements Visitor {
             String type;
             IdInitObblList idlist = (IdInitObblList) e.idList;
             for (IdInit id : idlist.idInits) {
-                newList.addIdInit(new IdInit(id.id));
+                newList.addIdInit(new IdInit(id.id, (Exp) id.assignConst));
                 type = (String) id.assignConst.accept(this);
                 varDeclList.addVarDeclOp(new VarDeclOp(type,newList));
                 newList = new IdInitList();

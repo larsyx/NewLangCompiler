@@ -1,0 +1,13 @@
+
+string ciao << "Ciao come va?";
+
+start:
+def main(): void {
+    integer variabile;
+    ("ciao: ", ciao) -->;
+
+    ("\n Inserisci un numero e lo stampo: \n") -->;
+    variabile <--;
+    (variabile) -->;
+    return;
+}

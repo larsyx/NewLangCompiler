@@ -21,10 +21,10 @@ def scegliOperazione(integer it): void{
 }
 
 def scegliOperazionep(): integer {
-    var int << 12, f << "ciao";
+    var inte << 12, f << "ciao";
     string i;
 
     scegliOperazione(12);
-    return int;
+    return inte;
 }
 

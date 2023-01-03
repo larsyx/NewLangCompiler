@@ -1,3 +1,3 @@
 #!/bin/bash
-gcc programma.c -o programma.exe
+gcc -o programma.exe programma.c -lm
 ./programma.exe
