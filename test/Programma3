@@ -1,6 +1,6 @@
 
 integer result << 1;
-
+boolean b << true;
 
 
 
@@ -9,10 +9,10 @@ def fibonacci(integer i): integer{
     var c1<< 1, c2<< 2;
 
     if (i=0) then {
-        return 0;
+        return 1;
     }
     if(i=1) then{
-        return 10;
+        return 1;
     }
     else{
         integer i1 << i-c1;
@@ -22,13 +22,31 @@ def fibonacci(integer i): integer{
         r2 << fibonacci(i2);
         return r1 + r2;
     }
+
 }
 
 
 start:
 def main():void{
-    result << fibonacci(5);
+    integer intero;
+    ("inserisci un numero per estrarre numero di fibonacci") -->!;
+    ("scegli un numero positivo:")-->;
+    intero <--;
 
-    ("numero di fibonacci: ", result) -->!;
-    return;
+    if(intero<0) then{
+        ("numero non corretto") -->!;
+        return;
+    }
+    else{
+        result << fibonacci(intero);
+
+        for i << 0 to 5 loop {
+            if(b) then{
+                ("numero di fibonacci: ", result) -->;
+                (" stampo b:", b) -->!;
+                b << false;
+            }
+        }
+        return;
+    }
 }

@@ -68,14 +68,14 @@ commentFinish = "*|"
     "<<"    { return new Symbol(sym.ASSIGN); }
     "return" { return new Symbol(sym.RETURN); }
 
-    {id}    { return new Symbol(sym.ID, new Identifier(yytext())); }
+
     {int}   { return new Symbol(sym.INTEGER_CONST, new Integer_const(Integer.parseInt(yytext()))); }
     {real}  { return new Symbol(sym.REAL_CONST, new Real_const(Float.parseFloat(yytext()))); }
     {str}   { return new Symbol(sym.STRING_CONST, new String_const(yytext())); }
     {char}  { return new Symbol(sym.CHAR_CONST, new Char_const((char) Integer.parseInt(yytext()))); }
 
     "true"  { return new Symbol(sym.TRUE, new True_const()); }
-    "false" { return new Symbol(sym.FALSE), new False_const(); }
+    "false" { return new Symbol(sym.FALSE, new False_const()); }
     "+"     { return new Symbol(sym.PLUS); }
     "-"     { return new Symbol(sym.MINUS); }
     "*"     { return new Symbol(sym.TIMES); }
@@ -92,6 +92,7 @@ commentFinish = "*|"
     "or"    { return new Symbol(sym.OR); }
     "not"   { return new Symbol(sym.NOT); }
 
+    {id}    { return new Symbol(sym.ID, new Identifier(yytext())); }
     {whitespace} {}
     [^]           { throw new Error("\n\nIllegal character < "+ yytext()+" >\n"); }
     // End of file

@@ -91,8 +91,21 @@ public class CreateSymbolTable implements Visitor {
 
     public Object visit(DeclList e) throws SemanticErrorException {
 
-        for(VarDeclOp o : e.varDeclList)
-            o.accept(this);
+        VarDeclList newOp = new VarDeclList();
+        ArrayList<VarDeclOp> remove = new ArrayList<>();
+        for(VarDeclOp op: e.varDeclList) {
+            if(op.isVar) {
+                remove.add(op);
+                newOp = (VarDeclList) op.accept(this);
+            }
+            else
+                op.accept(this);
+        }
+
+        for(VarDeclOp rem : remove)
+            e.varDeclList.remove(rem);
+        for(VarDeclOp vp: newOp.varDeclOps)
+            e.varDeclList.add(vp);
 
         for(FunOp o : e.funDeclList)
             o.accept(this);
@@ -282,8 +295,8 @@ public class CreateSymbolTable implements Visitor {
 
     public Object visit(False_const e) {
 
-        e.setType_node("boolean");
-        return "boolean";
+        e.setType_node("bool");
+        return "bool";
     }
 
     public Object visit(GEOp e) throws SemanticErrorException{
@@ -374,8 +387,8 @@ public class CreateSymbolTable implements Visitor {
 
     public Object visit(True_const e) {
 
-        e.setType_node("boolean");
-        return "boolean";
+        e.setType_node("bool");
+        return "bool";
     }
 
     public Object visit(UminusOp e) throws SemanticErrorException{

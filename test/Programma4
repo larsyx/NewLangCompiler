@@ -1,0 +1,16 @@
+
+var str << "Ciao sono una stringa";
+
+def concatenaStringhe(string str, str2): string {
+    return str & str2;
+}
+
+start:
+def main(): void{
+
+    string stt;
+    string temp << "stringa qualsiasi";
+     stt << concatenaStringhe(str, temp);
+    (stt) -->;
+    return;
+}

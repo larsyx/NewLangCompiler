@@ -53,27 +53,28 @@ public class CTranslate implements Visitor {
         String tipo = convertiTipi(e.type);
         if(e.outOrIn.equals("IN")) {
             if(tipo.equals(STRING)){
-                str += " "+ CHAR + " ";
-                for(Identifier id : e.id.ids)
-                    str += "*" + id.attrib + ",";
+                for(Identifier id : e.id.ids) {
+                    str += "" + CHAR + "*";
+                    str += id.attrib + ",";
+                }
                 str = str.substring(0,str.length()-1);
                 return str;
             }
 
-            str += "" + tipo;
-            str += e.id.accept(this);
+            for(Identifier id: e.id.ids)
+                str += tipo + e.id.accept(this);
         }
         else {
             if(tipo.equals(STRING)) {
-                str += " " + CHAR + " ";
-                for (Identifier id : e.id.ids)
-                    str += "*" + id.attrib + ",";
+                for (Identifier id : e.id.ids) {
+                    str += "" + CHAR + "+";
+                    str += id.attrib + ",";
+                }
                 str = str.substring(0, str.length() - 1);
             }
             else{
-                str += " " + tipo + " ";
                 for (Identifier id : e.id.ids)
-                    str += "*" + id.attrib + ",";
+                    str += tipo + "*" + id.attrib + ",";
                 str = str.substring(0, str.length() - 1);
             }
         }
@@ -86,6 +87,7 @@ public class CTranslate implements Visitor {
         str += "#include <string.h>\n";
         str += "#include <stdlib.h>\n";
         str += "#include <math.h>\n";
+        str += "#include<stdbool.h>\n";
 
         str += e.declList_f.accept( this);
         str += e.declList_s.accept(this);
@@ -148,15 +150,29 @@ public class CTranslate implements Visitor {
 
         Identifier id = e.idList.ids.get(0);
         Exp ex = e.exprList.expList.get(0);
-        str += id.attrib;
-        str += " =";
-        str += ex.accept(this);
+        if(id.getType_node().equals(STRING)){
+            String exString = (String) ex.accept(this);
+            if(exString.substring(exString.length()-2, exString.length()-1).equals(";"))
+                exString = exString.substring(0,exString.length()-2);
+            str += "strcpy(" + id.attrib +"," + exString +") ";
+        } else {
+            str += id.attrib;
+            str += "=";
+            str += ex.accept(this);
+        }
         if(str.substring(str.length()-1,str.length()).compareTo(";")!=0 && str.substring(str.length()-2,str.length()-1).compareTo(";")!=0 && str.substring(str.length()-3,str.length()-2).compareTo(";")!=0)
             str += ";\n";
         for(int i= 1; i < e.idList.ids.size(); i++, ex = e.exprList.expList.get(i), id = e.idList.ids.get(i)){
-            str += id.attrib;
-            str += " =";
-            str += ex.accept(this);
+            if(id.getType_node().equals(STRING)){
+                String exString = (String) ex.accept(this);
+                if(exString.substring(exString.length()-2, exString.length()-1).equals(";"))
+                    exString = exString.substring(0,exString.length()-1);
+                str += "strcpy(" + id.attrib +"," + exString +") ";
+            }else {
+                str += id.attrib;
+                str += "=";
+                str += ex.accept(this);
+            }
             if(str.substring(str.length()-1,str.length()).compareTo(";")!=0)
                 str += ";\n";
         }
@@ -187,8 +203,11 @@ public class CTranslate implements Visitor {
 
         str += e.id.accept(this);
         str += "(";
-        if(e.exprList != null)
-            str += e.exprList.accept(this);
+
+        for(Exp exp: e.exprList.expList)
+            str += exp.accept(this) + ",";
+
+        str = str.substring(0, str.length()-1);
         str += "); ";
         return str;
     }
@@ -216,6 +235,7 @@ public class CTranslate implements Visitor {
                 case STRING:
                     str += "%s,";
                     break;
+                case BOOL:
                 case INTEGERNEW:
                     str += "%d,";
                     break;
@@ -272,6 +292,7 @@ public class CTranslate implements Visitor {
                 case STRING:
                     str += "%s";
                     break;
+                case BOOL:
                 case INTEGERNEW:
                     str += "%d";
                     break;
@@ -511,12 +532,11 @@ public class CTranslate implements Visitor {
         if(isWriting)
             return e.getType_node();
 
-        String str ="<NEOp> \n";
-
+        String str =" ";
         str += e.left.accept(this);
+        str += " < ";
         str += e.right.accept(this);
 
-        str +="\n</NEOp> \n";
         return str;
     }
 
@@ -733,6 +753,7 @@ public class CTranslate implements Visitor {
             case CHAR: return CHAR;
             case STRING : return STRING;
             case VOID: return VOID;
+            case BOOL: return BOOL;
         }
         return null;
     }
@@ -744,4 +765,5 @@ public class CTranslate implements Visitor {
     public static final String CHAR = "char";
     public static final String STRING = "string";
     public static final String VOID = "void";
+    public static final String BOOL = "bool";
 }

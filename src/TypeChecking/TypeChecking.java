@@ -138,7 +138,7 @@ public class TypeChecking implements Visitor {
         //controllo corrispondenza i-esima assegnazione
         Identifier id = e.idList.ids.get(0);
         Exp exp = e.exprList.expList.get(0);
-        for(int i = 0 ; i < e.idList.ids.size(); id = e.idList.ids.get(i), exp = e.exprList.expList.get(i), i++)
+         for(int i = 0 ; i < e.idList.ids.size(); id = e.idList.ids.get(i), exp = e.exprList.expList.get(i), i++)
             if(!id.accept(this).equals(exp.accept(this))) {
                 e.setType_node(ERROR);
                 throw new SemanticErrorException("Errore assegnazione: " + id.attrib + " e " + exp.accept(this));
@@ -438,8 +438,8 @@ public class TypeChecking implements Visitor {
     @Override
     public Object visit(IdInitList e) throws SemanticErrorException {
         String result = (String) e.idInits.get(0).accept(this);
-        for(IdInit idInit: e.idInits)      //solo idInitList perchè l'inferenza è stata gestita nella creazione della tabella dei simboli
-            if(!result.equals(idInit.accept(this))){
+        for (IdInit idInit : e.idInits)      //solo idInitList perchè l'inferenza è stata gestita nella creazione della tabella dei simboli
+            if (!result.equals(idInit.accept(this))) {
                 e.setType_node(ERROR);
                 throw new SemanticErrorException("errore inizializazione variabili");
             }
