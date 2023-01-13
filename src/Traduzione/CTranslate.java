@@ -87,7 +87,7 @@ public class CTranslate implements Visitor {
         str += "#include <string.h>\n";
         str += "#include <stdlib.h>\n";
         str += "#include <math.h>\n";
-        str += "#include<stdbool.h>\n";
+        str += "#include <stdbool.h>\n";
 
         str += e.declList_f.accept( this);
         str += e.declList_s.accept(this);
@@ -204,9 +204,11 @@ public class CTranslate implements Visitor {
         str += e.id.accept(this);
         str += "(";
 
-        for(Exp exp: e.exprList.expList)
-            str += exp.accept(this) + ",";
-
+        if(e.exprList != null)
+            for(Exp exp: e.exprList.expList)
+                str += exp.accept(this) + ",";
+        else
+            str += " ";
         str = str.substring(0, str.length()-1);
         str += "); ";
         return str;
@@ -374,20 +376,6 @@ public class CTranslate implements Visitor {
         return str;
     }
 
-    public Object visit(DivIntOp e) throws SemanticErrorException {
-        String str =" ";
-
-        if(isWriting)
-            return e.getType_node();
-
-        str += e.left.accept(this);
-        str += "-";
-        str += e.right.accept(this);
-
-        str +=" ";
-        return str;
-    }
-
     public Object visit(DivOp e) throws SemanticErrorException {
 
         if(isWriting)
@@ -534,7 +522,7 @@ public class CTranslate implements Visitor {
 
         String str =" ";
         str += e.left.accept(this);
-        str += " < ";
+        str += " != ";
         str += e.right.accept(this);
 
         return str;

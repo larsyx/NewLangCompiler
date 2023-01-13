@@ -275,12 +275,6 @@ public class CreateSymbolTable implements Visitor {
         return current;
     }
 
-    public Object visit(DivIntOp e) throws SemanticErrorException {
-        e.left.accept(this);
-        e.right.accept(this);
-        return current;
-    }
-
     public Object visit(DivOp e)throws SemanticErrorException{
         e.left.accept(this);
         e.right.accept(this);

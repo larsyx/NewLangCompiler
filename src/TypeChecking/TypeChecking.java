@@ -271,14 +271,6 @@ public class TypeChecking implements Visitor {
     }
 
     @Override
-    public Object visit(DivIntOp e) throws SemanticErrorException {
-        String left = (String) e.left.accept(this);
-        String right = (String) e.right.accept(this);
-
-        return OperatorsTables.opt(OperatorsTables.DIV, left, right);   //controllare
-    }
-
-    @Override
     public Object visit(DivOp e) throws SemanticErrorException {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);

@@ -209,16 +209,6 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
-    public Object visit(DivIntOp e) throws SemanticErrorException {
-        String str ="<DivIntOp> \n";
-
-        str += e.left.accept(this);
-        str += e.right.accept(this);
-
-        str +="\n</DivIntOp> \n";
-        return str;
-    }
-
     public Object visit(DivOp e) throws SemanticErrorException {
         String str ="<DivOp> \n";
 

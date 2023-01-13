@@ -1420,7 +1420,7 @@ class CUP$parser$actions {
 		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Exp e2 = (Exp)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = new DivIntOp(e1,e2); 
+		 RESULT = new DiffOp(e1,e2); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("Expr",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

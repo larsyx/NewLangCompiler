@@ -41,7 +41,7 @@ commentFinish = "*|"
     "|"     { return new Symbol(sym.PIPE); }
     "var"   { return new Symbol(sym.VAR); }
     "integer" { return new Symbol(sym.INT); }
-    "float" { return new Symbol(sym.FLOAT); }
+    "real" { return new Symbol(sym.FLOAT); }
     "string" { return new Symbol(sym.STRING); }
     "boolean" { return new Symbol(sym.BOOL); }
     "char"  { return new Symbol(sym.CHAR); }
@@ -83,11 +83,11 @@ commentFinish = "*|"
     "^"     { return new Symbol(sym.POW); }
     "&"     { return new Symbol(sym.STR_CONCAT); }
     "="     { return new Symbol(sym.EQ); }
-    ["<>""!="] { return new Symbol(sym.NE); }
     "<"     { return new Symbol(sym.LT); }
     "<="    { return new Symbol(sym.LE); }
     ">"     { return new Symbol(sym.GT); }
     ">="    { return new Symbol(sym.GE); }
+    ["<>""!="] { return new Symbol(sym.NE); }
     "and"   { return new Symbol(sym.AND); }
     "or"    { return new Symbol(sym.OR); }
     "not"   { return new Symbol(sym.NOT); }

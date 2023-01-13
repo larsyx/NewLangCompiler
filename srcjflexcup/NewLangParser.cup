@@ -152,7 +152,7 @@ Else ::= /* empty */                    {: RESULT = null; :}
 
 WhileStat ::= WHILE Expr:i LOOP Body:b    {: RESULT = new WhileOp(i,b); :}
 ;
-	
+
 ForStat ::= FOR ID:id ASSIGN INTEGER_CONST:i1 TO INTEGER_CONST:i2 LOOP Body:b    {: RESULT = new ForOp(id,i1,i2,b); :}
 ;
 
@@ -188,7 +188,7 @@ Expr ::= TRUE:t                         {: RESULT = t; :}
             | ID: id                    {: RESULT = id; :}
             | FunCall:f                 {: RESULT = f; :}
             | Expr:e1 PLUS Expr:e2      {: RESULT = new AddOp(e1,e2); :}
-            | Expr:e1 MINUS Expr:e2     {: RESULT = new DivIntOp(e1,e2); :}
+            | Expr:e1 MINUS Expr:e2     {: RESULT = new DiffOp(e1,e2); :}
             | Expr:e1 TIMES Expr:e2     {: RESULT = new MulOp(e1,e2); :}
             | Expr:e1 DIV Expr:e2       {: RESULT = new DivOp(e1,e2); :}
             | Expr:e1 AND Expr:e2       {: RESULT = new AndOp(e1,e2); :}

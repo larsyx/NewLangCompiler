@@ -50,8 +50,6 @@ public interface Visitor {
 
     Object visit(DiffOp e) throws SemanticErrorException;
 
-    Object visit(DivIntOp e) throws SemanticErrorException;
-
     Object visit(DivOp e) throws SemanticErrorException;
 
     Object visit(EQOp e) throws SemanticErrorException;

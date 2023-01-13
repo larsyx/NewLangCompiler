@@ -1,6 +1,6 @@
 
 
-float op1, op2;
+real op1, op2;
 
 def scegliOpzione(): integer {
     integer opzione;
@@ -14,6 +14,10 @@ def scegliOpzione(): integer {
 
     opzione <--;
 
+    if (opzione >= 6 or opzione < 1) then {
+        opzione << scegliOpzione();
+    }
+
     return opzione;
 }
 
@@ -23,9 +27,9 @@ def main(): void {
     while flag = 1 loop {
         integer opzione << scegliOpzione();
 
-        float risultato;
+        real risultato;
         risultato << operazione(opzione);
-        ("Risultato operazione: ", risultato) -->!;
+        ("Risultato operazione: " & risultato) -->!;
 
         ("Vuoi fare un'altra operazione? (1:si 0:no): ") -->;
         flag <-- ;
@@ -33,8 +37,8 @@ def main(): void {
     return;
 }
 
-def operazione(integer opz ): float {
-    float risultato;
+def operazione(integer opz ): real {
+    real risultato;
 
     ("inserisci primo numero:") -->;
     op1 <--;
