@@ -12,11 +12,15 @@ import VisitorPattern.Stat.*;
 import VisitorPattern.Visitor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CTranslate implements Visitor {
 
     private boolean isWriting = false;
     private boolean noSemi = false;
+    private boolean isMain = false;
+    private ArrayList<String> outFun;
+    private HashMap<String, Integer> funopParam;
     //Program
     public Object visit(BodyOp e) throws SemanticErrorException {
         String str ="{\n";
@@ -31,18 +35,24 @@ public class CTranslate implements Visitor {
     public Object visit(FunOp e) throws SemanticErrorException {
         String str ="\n";
 
+        outFun = new ArrayList<>();
         String tipo = convertiTipi(e.type);
         if(tipo.equals(STRING))
             str += "" + CHAR + "* "; //controllare se prima o dopo
         else
             str += tipo + " ";
-        str+= e.id.accept(this);
+        if(isMain){
+            str += "main ";
+            isMain = false;
+        }else
+            str+= e.id.accept(this);
         str += "(";
         if(e.paramDeclList != null)
             str += e.paramDeclList.accept(this);
         str += ")";
         str += e.body.accept(this);
 
+        outFun = new ArrayList<>();
         str +="\n";
         return str;
     }
@@ -51,32 +61,28 @@ public class CTranslate implements Visitor {
         String str =" ";
 
         String tipo = convertiTipi(e.type);
-        if(e.outOrIn.equals("IN")) {
-            if(tipo.equals(STRING)){
-                for(Identifier id : e.id.ids) {
-                    str += "" + CHAR + "*";
-                    str += id.attrib + ",";
-                }
-                str = str.substring(0,str.length()-1);
-                return str;
-            }
 
+        if(tipo.equals(STRING)){
+            for(Identifier id : e.id.ids) {
+                str += "" + CHAR + "*";
+                str += id.attrib + ",";
+            }
+            str = str.substring(0,str.length()-1);
+            return str;
+        }
+
+        if(e.outOrIn.equals("IN")) {
             for(Identifier id: e.id.ids)
-                str += tipo + e.id.accept(this);
+                str += tipo + id.accept(this)+ ",";
+            str = str.substring(0,str.length()-1);
         }
         else {
-            if(tipo.equals(STRING)) {
-                for (Identifier id : e.id.ids) {
-                    str += "" + CHAR + "+";
-                    str += id.attrib + ",";
-                }
-                str = str.substring(0, str.length() - 1);
+            for (Identifier id : e.id.ids) {
+                str += tipo + "*" + id.attrib + ",";
+                outFun.add(id.attrib);
             }
-            else{
-                for (Identifier id : e.id.ids)
-                    str += tipo + "*" + id.attrib + ",";
-                str = str.substring(0, str.length() - 1);
-            }
+            str = str.substring(0, str.length() - 1);
+
         }
         return str;
     }
@@ -89,9 +95,34 @@ public class CTranslate implements Visitor {
         str += "#include <math.h>\n";
         str += "#include <stdbool.h>\n";
 
+        funopParam = new HashMap<>();
+        int i;
+        if(e.declList_s != null && e.declList_s.funDeclList != null)          //creazione di hashmap dove indica per ogni funzione il numero di paramentri IN, utile per FunCallOp
+            for(FunOp fun: e.declList_s.funDeclList) {
+                i=0;
+                if(fun != null && fun.paramDeclList != null)
+                    for (ParDeclOp par : fun.paramDeclList.parDeclOps)
+                        if(par !=null && par.outOrIn.equals("IN")){
+                            int temp = par.id.ids.size();
+                            i+= temp;
+                        }
+                funopParam.put(fun.id.attrib , i);
+            }
+        if(e.declList_f != null && e.declList_f.funDeclList != null)          //creazione di hashmap dove indica per ogni funzione il numero di paramentri IN, utile per FunCallOp
+            for(FunOp fun: e.declList_f.funDeclList) {
+                i=0;
+                if(fun != null && fun.paramDeclList != null)
+                    for (ParDeclOp par : fun.paramDeclList.parDeclOps)
+                        if(par !=null && par.outOrIn.equals("IN")) {
+                            int temp = par.id.ids.size();
+                            i+= temp;
+                        }
+                funopParam.put(fun.id.attrib , i);
+            }
         str += e.declList_f.accept( this);
         str += e.declList_s.accept(this);
 
+        isMain = true;
         str += e.main.accept( this);
 
         str +="\n";
@@ -156,6 +187,8 @@ public class CTranslate implements Visitor {
                 exString = exString.substring(0,exString.length()-2);
             str += "strcpy(" + id.attrib +"," + exString +") ";
         } else {
+            if(outFun !=null && outFun.contains(id.attrib))
+                str+= "*";
             str += id.attrib;
             str += "=";
             str += ex.accept(this);
@@ -169,6 +202,8 @@ public class CTranslate implements Visitor {
                     exString = exString.substring(0,exString.length()-1);
                 str += "strcpy(" + id.attrib +"," + exString +") ";
             }else {
+                if(outFun !=null && outFun.contains(id.attrib))
+                    str+= "*";
                 str += id.attrib;
                 str += "=";
                 str += ex.accept(this);
@@ -204,10 +239,20 @@ public class CTranslate implements Visitor {
         str += e.id.accept(this);
         str += "(";
 
-        if(e.exprList != null)
-            for(Exp exp: e.exprList.expList)
-                str += exp.accept(this) + ",";
-        else
+        int in = funopParam.get(e.id.attrib);       //usato per i puntatori
+        if(e.exprList != null) {
+            for (Exp exp : e.exprList.expList) {
+                String temp = exp.accept(this) + ",";
+                if(in <= 0 )
+                    if(temp.substring(1, 2).equals("*"))
+                        temp = temp.substring(2, temp.length());
+                    else
+                        str += "&";
+
+                str += temp;
+                in--;
+            }
+        }else
             str += " ";
         str = str.substring(0, str.length()-1);
         str += "); ";
@@ -251,7 +296,7 @@ public class CTranslate implements Visitor {
         }
         str = str.substring(0, str.length()-1) + "\"";
         for(Identifier i: e.idList.ids) {
-            if(i.getType_node().equals(STRING))
+            if(i.getType_node().equals(STRING) || outFun!=null && outFun.contains(i.attrib))
                 str += "," + i.attrib;
             else
                 str += ",&" + i.attrib;
@@ -291,6 +336,8 @@ public class CTranslate implements Visitor {
             //Gestire costanti
             switch (tipo) {
                 case CHAR:
+                    str += "%c";
+                    break;
                 case STRING:
                     str += "%s";
                     break;
@@ -356,7 +403,7 @@ public class CTranslate implements Visitor {
         String str =" ";
 
 
-        str += e.attrib;
+        str += "'" + e.attrib + "'";
 
         str +=" ";
         return str;
@@ -454,6 +501,8 @@ public class CTranslate implements Visitor {
 
         String str =" ";
 
+        if(outFun !=null && outFun.contains(e.attrib))
+            str+= "*";
         str += e.attrib;
 
         str +="";

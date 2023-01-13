@@ -72,7 +72,7 @@ commentFinish = "*|"
     {int}   { return new Symbol(sym.INTEGER_CONST, new Integer_const(Integer.parseInt(yytext()))); }
     {real}  { return new Symbol(sym.REAL_CONST, new Real_const(Float.parseFloat(yytext()))); }
     {str}   { return new Symbol(sym.STRING_CONST, new String_const(yytext())); }
-    {char}  { return new Symbol(sym.CHAR_CONST, new Char_const((char) Integer.parseInt(yytext()))); }
+    {char}  { return new Symbol(sym.CHAR_CONST, new Char_const((char) yytext().charAt(1))); }
 
     "true"  { return new Symbol(sym.TRUE, new True_const()); }
     "false" { return new Symbol(sym.FALSE, new False_const()); }

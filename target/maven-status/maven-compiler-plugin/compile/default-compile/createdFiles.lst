@@ -40,7 +40,6 @@ VisitorPattern\Expressions\Const\Integer_const.class
 VisitorPattern\Expressions\Identifier.class
 VisitorPattern\Stat\ReturnOp.class
 VisitorPattern\Stat\StatOp.class
-VisitorPattern\Expressions\DivIntOp.class
 VisitorPattern\Expressions\IdentifierList.class
 VisitorPattern\Expressions\Const\True_const.class
 VisitorPattern\Expressions\LEOp.class

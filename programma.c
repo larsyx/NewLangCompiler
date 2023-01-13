@@ -4,77 +4,34 @@
 #include <math.h>
 #include <stdbool.h>
 
-float   op2, op1;
-int  scegliOpzione(){
-int   opzione;
- printf("Scegli opzione: \n");
-printf("opzione 1: somma \n");
-printf("opzione 2: sottrazione\n");
-printf("opzione 3: prodotto\n");
-printf("opzione 4: divisione\n");
-printf("opzione 5: potenza\n");
-scanf("%d",&opzione);
- if(    opzione>= 6  ||  opzione< 1    ) {
-  opzione=  scegliOpzione();
 
-}
- 
-return  opzione;
+
+
+void  passaNumero(  int*numero){
+int   numero2;
+  *numero= 5 ;
+printf("stampo da passaNumero:%d\n", *numero);
+ *numero=  passaNumero2( *numero,& numero2);
+printf("stampo numero 2: %d\n", numero2);
+return ;
 
 }
 
 
-
-
-float  operazione(  int  opz ){
-float   risultato;
- printf("inserisci primo numero:");
-scanf("%f",&op1);
-printf("inserisci secondo numero:");
-scanf("%f",&op2);
- if(   opz== 1   ) {
-  risultato=  op1+ op2 ;
-
-}
- 
- if(   opz== 2   ) {
-  risultato=  op1- op2 ;
-
-}
- 
- if(   opz== 3   ) {
-  risultato=  op1* op2 ;
-
-}
- 
- if(   opz== 4   ) {
-  risultato=  op1/ op2 ;
-
-}
- 
- if(   opz== 5   ) {
- return pow( op1, op2) ;
-
-}
- 
-return  risultato;
+int  passaNumero2(  int num, int*num2){
+  num= 10 ;
+ *num2= 5 ;
+return  num;
 
 }
 
 
 
-void  main(){
-int   flag =  1 ;
-  while(  flag== 1  ){
-float   risultato;
-int   opzione =   scegliOpzione();
-  risultato=  operazione( opzione);
-printf("%s\n",strcat( "Risultato operazione: " , risultato) );
-printf("Vuoi fare un'altra operazione? (1:si 0:no): ");
-scanf("%d",&flag);
-
-}
- 
+void main (){
+char stringa[1000] ={  "molto bene"  };int   numero =  0 ;
+ printf("esempio per controllare funzionamento parametri OUT funzione\n");
+  passaNumero(& numero); 
+printf("%d\n", numero);
 return ;
 
 }

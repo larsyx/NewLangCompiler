@@ -1,0 +1,31 @@
+
+
+start:
+def funzione(): void{
+    integer numero <<0;
+    string stringa << "molto bene";
+    ("esempio per controllare funzionamento parametri OUT funzione") -->!;
+
+    passaNumero(numero);
+    (numero) -->!;
+
+    return;
+}
+
+def passaNumero(out integer numero): void{
+    integer numero2;
+    numero << 5;
+    ("stampo da passaNumero:",numero) -->!;
+
+    numero << passaNumero2(numero, numero2);
+    ("stampo numero 2: ",numero2)-->!;
+    return;
+}
+
+
+def passaNumero2(integer num | out integer num2): integer {
+    num << 10;
+    num2 << 5;
+    return num;
+}
+

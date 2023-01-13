@@ -1,0 +1,32 @@
+
+integer numero, pi;
+
+
+def tabellina(integer t): integer {
+    for i<<0 to 11 loop {
+        integer numero << prodotto(t,i);
+        stampa(numero, i);
+    }
+
+    return 1;
+}
+
+def stampa(integer n, i): void{
+    (numero) -->;
+    (" * ", i) -->;
+    (" = ",n) -->!;
+    return;
+}
+
+start:
+def esempio(): void {
+    ("inserisci un numero per sapere la sua tabellina: ") -->;
+    numero <--;
+
+    tabellina(numero);
+    return ;
+}
+
+def prodotto(integer p,t): integer{
+    return p * t;
+}
