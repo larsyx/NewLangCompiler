@@ -407,10 +407,13 @@ public class CreateSymbolTable implements Visitor {
         for(VarDeclOp op: e.varDeclOps) {
             if(op.isVar) {
                 remove.add(op);
-                newOp = (VarDeclList) op.accept(this);
+                VarDeclList temp = (VarDeclList) op.accept(this);
+                for(VarDeclOp op1: temp.varDeclOps)
+                    newOp.addVarDeclOp(op1);
             }
             else
                 op.accept(this);
+
         }
 
         for(VarDeclOp rem : remove)

@@ -4,34 +4,49 @@
 #include <math.h>
 #include <stdbool.h>
 
+int   c =  1 ;
+float  sommac(  int a,int d, float b, char*size){
+float   result;
+  result=    a+ b + c + d ;
+ if(   result> 100   ) {
+char valore[1000] ={  "grande"  };  strcpy(size, valore) ;
 
+}
+else {
+char valore[1000] ={  "piccola"  };  strcpy(size, valore) ;
 
-
-void  passaNumero(  int*numero){
-int   numero2;
-  *numero= 5 ;
-printf("stampo da passaNumero:%d\n", *numero);
- *numero=  passaNumero2( *numero,& numero2);
-printf("stampo numero 2: %d\n", numero2);
-return ;
+}
+ 
+return  result;
 
 }
 
 
-int  passaNumero2(  int num, int*num2){
-  num= 10 ;
- *num2= 5 ;
-return  num;
-
-}
 
 
 
 void main (){
-char stringa[1000] ={  "molto bene"  };int   numero =  0 ;
- printf("esempio per controllare funzionamento parametri OUT funzione\n");
-  passaNumero(& numero); 
-printf("%d\n", numero);
+int   a =  1 ;
+float   b =  2.2 ;
+int   x =  3 ;
+int   ans =  0 ;
+char taglia[1000] ;int   ans1;
+float   risultato =   sommac( a, x, b,& taglia);
+ printf("la somma di %d e %f incrementata di %d e' %s\n", a, b, c, taglia);
+printf("ed e' pari a %f\n", risultato);
+printf("vuoi continuare? (1:si/0:no): - inserisci due volte la risposta\n");
+scanf("%d,%d",&ans1,&ans);
+ while(  ans== 1  ){
+  risultato=  sommac( a, x, b,& taglia);
+printf("la somma di %d e %f incrementata di %d e' %s\n", a, b, c, taglia);
+printf("ed e' pari a %f\n", risultato);
+printf("vuoi continuare? (1:si/0:no):");
+scanf("%d",&ans);
+
+}
+ 
+printf("\n");
+printf("ciao");
 return ;
 
 }

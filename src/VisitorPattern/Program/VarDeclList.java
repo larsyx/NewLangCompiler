@@ -26,10 +26,11 @@ public class VarDeclList extends Node {
         varDeclOps.remove(op);
     }
     public void addVarDeclOp(VarDeclOp op){
-        varDeclOps.add(op);
+        varDeclOps.add(0, op);
     }
 
     public Object accept(Visitor v ) throws SemanticErrorException {
         return v.visit(this);
     }
+
 }

@@ -51,18 +51,6 @@ public class OperatorsTables {
             case STR_CONCAT:
                 if(typeLeft.equals("string") && typeRight.equals("string"))
                     return "string";
-                if(typeLeft.equals("string") && typeRight.equals("float"))
-                    return "string";
-                if(typeLeft.equals("float") && typeRight.equals("string"))
-                    return "string";
-                if(typeLeft.equals("int") && typeRight.equals("string"))
-                    return "string";
-                if(typeLeft.equals("string") && typeRight.equals("int"))
-                    return "string";
-                if(typeLeft.equals("boolean") && typeRight.equals("string"))
-                    return "string";
-                if(typeLeft.equals("string") && typeRight.equals("boolean"))
-                    return "string";
                 else
                     throwException(typeLeft,typeRight,operator);
                 break;
