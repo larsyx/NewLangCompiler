@@ -1,0 +1,35 @@
+|| questo programma calcola massimo comune divisore e minimo comune multiplo di 2 numeri
+
+def massimoComuneDivisore(integer n1, n2 | out integer result): integer{
+    integer resto;
+    while (n2 > 0) loop{
+        resto << n1 / n2;
+        resto << (n1 - n2 * resto);
+        n1 << n2;
+        n2 << resto;
+    }
+    result << n1;
+    return n1;
+}
+
+def minimoComuneMultiplo(integer n1, n2 | out integer result): integer{
+    integer ris << n1 * n2 / massimoComuneDivisore(n1,n2,result);
+    result << ris;
+    return ris;
+}
+
+start:
+def main():void{
+
+    integer tot, n1,n2;
+    ("inserisci 2 numeri per calcolare mcd e mcm")-->!;
+    ("inserisci: ")-->;
+    n1, n2 <--;
+
+    massimoComuneDivisore(n1,n2, tot);
+    ("stampo massimo comune divisore risultato: ", tot)-->!;
+    minimoComuneMultiplo(n1,n2, tot);
+    ("stampo minimo comune multiplo risultato: ", tot)-->!;
+    return;
+}
+

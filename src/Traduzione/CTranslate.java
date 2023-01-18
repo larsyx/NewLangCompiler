@@ -3,7 +3,6 @@ package Traduzione;
 import SymbolTable.SemanticErrorException;
 import VisitorPattern.Expressions.*;
 import VisitorPattern.Expressions.Const.*;
-import VisitorPattern.Node;
 import VisitorPattern.Program.*;
 import VisitorPattern.Program.IdInit.IdInit;
 import VisitorPattern.Program.IdInit.IdInitList;
@@ -16,6 +15,7 @@ import java.util.HashMap;
 
 public class CTranslate implements Visitor {
 
+    private String str2 ="";
     private boolean isWriting = false;
     private boolean noSemi = false;
     private boolean isMain = false;
@@ -38,7 +38,7 @@ public class CTranslate implements Visitor {
         outFun = new ArrayList<>();
         String tipo = convertiTipi(e.type);
         if(tipo.equals(STRING))
-            str += "" + CHAR + "* "; //controllare se prima o dopo
+            str += "" + CHAR + "* ";
         else
             str += tipo + " ";
         if(isMain){
@@ -50,8 +50,8 @@ public class CTranslate implements Visitor {
         if(e.paramDeclList != null)
             str += e.paramDeclList.accept(this);
         str += ")";
+        str2 += str +";";
         str += e.body.accept(this);
-
         outFun = new ArrayList<>();
         str +="\n";
         return str;
@@ -128,12 +128,13 @@ public class CTranslate implements Visitor {
                         }
                 funopParam.put(fun.id.attrib , i);
             }
-        str += e.declList_f.accept( this);
-        str += e.declList_s.accept(this);
+        String str3 ="";
+        str3 += e.declList_f.accept( this);
+        str3 += e.declList_s.accept(this);
 
         isMain = true;
-        str += e.main.accept( this);
-
+        str3 += e.main.accept( this);
+        str = str + str2 + str3;
         str +="\n";
         return str;
     }

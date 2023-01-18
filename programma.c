@@ -4,32 +4,46 @@
 #include <math.h>
 #include <stdbool.h>
 
+int  massimoComuneDivisore(  int n1,int n2, int*result);
+int  minimoComuneMultiplo(  int n1,int n2, int*result);
+void main ();
 
+int  massimoComuneDivisore(  int n1,int n2, int*result){
+int   resto;
+  while(  n2> 0  ){
+  resto=  n1/ n2 ;
+ resto=  n1-  n2* resto  ;
+ n1= n2;
+ n2= resto;
 
-
-char*  passaStringa2(  char str[], char *str2){
-  strcpy(str, "stringa2" ) ;
- strcpy(str2, "stringa3" ) ;
-return  str;
+}
+ 
+ *result= n1;
+return  n1;
 
 }
 
 
-void  passaStringa(  char *str){
-char str2[1000] ;  strcpy(str, "ciao" ) ;
-printf("stampo da passaStringa:%s\n", str);
- strcpy(str,  passaStringa2( str, str2)) ;
-printf("stampo stringa 2: %s\n", str2);
-return ;
+int  minimoComuneMultiplo(  int n1,int n2, int*result){
+int   ris =    n1* n2 /  massimoComuneDivisore( n1, n2,result);  ;
+  *result= ris;
+return  ris;
 
 }
+
+
 
 
 
 void main (){
-char stringa[1000] ={  "molto bene"  }; printf("esempio per controllare funzionamento parametri OUT funzione\n");
-  passaStringa( stringa); 
-printf("%s\n", stringa);
+int   n2, n1, tot;
+ printf("inserisci 2 numeri per calcolare mcd e mcm\n");
+printf("inserisci: ");
+scanf("%d %d",&n1,&n2);
+  massimoComuneDivisore( n1, n2,& tot); 
+printf("stampo massimo comune divisore risultato: %d\n", tot);
+  minimoComuneMultiplo( n1, n2,& tot); 
+printf("stampo minimo comune multiplo risultato: %d\n", tot);
 return ;
 
 }
