@@ -1,0 +1,60 @@
+|* Programma che dopo aver inserito un numero stampa il fattoriale passo dopo passo *|
+
+var totale << 0;
+
+def moltiplicazioneCalcolo(integer a,b | out integer result): boolean{
+
+    if( a = 1 )then{
+        result << 1;
+        return false;
+    }
+    if( b <= 0) then{
+        return false;
+    }
+    else{
+        result << a * b;
+        ("moltiplicazione di ", a, " con ", b, " risultato: ", result) -->!;
+        return true;
+    }
+}
+
+
+def fattoriale(out integer result): integer{
+    var t << true;
+    integer a << result;
+    while t loop{
+        integer b << a - 1;
+        a << a - 1;
+
+        t << moltiplicazioneCalcolo(result, b, result);
+    }
+
+    return totale;
+}
+
+start:
+def inizio(): void{
+
+    || calcolare di 5 numeri
+
+    for i << 3 to 8 loop{
+        integer num;
+        ("questo programma permette di calcolare il fattoriale di un numero") -->!;
+        ("inserisci il numero: ") -->;
+        num <--;
+        if( num <= 0 ) then{
+            ("valore negativo non possibile") -->!;
+        }
+        else{
+            totale << num;
+            fattoriale(totale);
+        }
+
+
+    }
+
+
+    return;
+}
+
+

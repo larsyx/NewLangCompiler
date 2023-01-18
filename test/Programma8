@@ -1,0 +1,29 @@
+
+
+start:
+def funzione(): void{
+    string stringa << "molto bene";
+    ("esempio per controllare funzionamento parametri OUT funzione") -->!;
+
+    passaStringa(stringa);
+    (stringa) -->!;
+
+    return;
+}
+
+def passaStringa2 (string str | out string str2): string {
+    str << "stringa2";
+    str2 << "stringa3";
+    return str;
+}
+
+def passaStringa(out string str): void{
+    string str2;
+    str << "ciao";
+    ("stampo da passaStringa:",str) -->!;
+
+    str << passaStringa2(str, str2);
+    ("stampo stringa 2: ",str2)-->!;
+    return;
+}
+

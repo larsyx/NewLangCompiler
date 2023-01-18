@@ -29,7 +29,7 @@ def main(): void {
 
         real risultato;
         risultato << operazione(opzione);
-        ("Risultato operazione: " & risultato) -->!;
+        ("Risultato operazione: ", risultato) -->!;
 
         ("Vuoi fare un'altra operazione? (1:si 0:no): ") -->;
         flag <-- ;

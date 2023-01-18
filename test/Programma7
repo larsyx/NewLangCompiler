@@ -29,6 +29,7 @@ def esempio(): void{
     ("ed e' pari a ", risultato)-->!;
     ("vuoi continuare? (1:si/0:no): - inserisci due volte la risposta")-->!;
     ans1,ans <--;
+    ("ans1:", ans1, "ans:",taglia)-->!;
     while ans = 1 loop{
         a <-- "inserisci un intero:";
         b <-- "inserisci un reale";

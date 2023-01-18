@@ -123,6 +123,8 @@ public class CreateSymbolTable implements Visitor {
                     throw new SemanticErrorException("Errore dichiarazione multipla di: " + symbol.getSymbol());
                 current.addSymbol(symbol);
                 id.id.setType_node(e.type);                            //asegnazione type per type checking
+                if(id.assign !=null)
+                    id.assign.accept(this);
             }
         } else {
             VarDeclList varDeclList = new VarDeclList();            //gestione inferenza var
@@ -289,8 +291,8 @@ public class CreateSymbolTable implements Visitor {
 
     public Object visit(False_const e) {
 
-        e.setType_node("bool");
-        return "bool";
+        e.setType_node("boolean");
+        return "boolean";
     }
 
     public Object visit(GEOp e) throws SemanticErrorException{
@@ -381,8 +383,8 @@ public class CreateSymbolTable implements Visitor {
 
     public Object visit(True_const e) {
 
-        e.setType_node("bool");
-        return "bool";
+        e.setType_node("boolean");
+        return "boolean";
     }
 
     public Object visit(UminusOp e) throws SemanticErrorException{

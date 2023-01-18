@@ -4,49 +4,32 @@
 #include <math.h>
 #include <stdbool.h>
 
-int   c =  1 ;
-float  sommac(  int a,int d, float b, char*size){
-float   result;
-  result=    a+ b + c + d ;
- if(   result> 100   ) {
-char valore[1000] ={  "grande"  };  strcpy(size, valore) ;
 
-}
-else {
-char valore[1000] ={  "piccola"  };  strcpy(size, valore) ;
 
-}
- 
-return  result;
+
+char*  passaStringa2(  char str[], char *str2){
+  strcpy(str, "stringa2" ) ;
+ strcpy(str2, "stringa3" ) ;
+return  str;
 
 }
 
 
+void  passaStringa(  char *str){
+char str2[1000] ;  strcpy(str, "ciao" ) ;
+printf("stampo da passaStringa:%s\n", str);
+ strcpy(str,  passaStringa2( str, str2)) ;
+printf("stampo stringa 2: %s\n", str2);
+return ;
+
+}
 
 
 
 void main (){
-int   a =  1 ;
-float   b =  2.2 ;
-int   x =  3 ;
-int   ans =  0 ;
-char taglia[1000] ;int   ans1;
-float   risultato =   sommac( a, x, b,& taglia);
- printf("la somma di %d e %f incrementata di %d e' %s\n", a, b, c, taglia);
-printf("ed e' pari a %f\n", risultato);
-printf("vuoi continuare? (1:si/0:no): - inserisci due volte la risposta\n");
-scanf("%d,%d",&ans1,&ans);
- while(  ans== 1  ){
-  risultato=  sommac( a, x, b,& taglia);
-printf("la somma di %d e %f incrementata di %d e' %s\n", a, b, c, taglia);
-printf("ed e' pari a %f\n", risultato);
-printf("vuoi continuare? (1:si/0:no):");
-scanf("%d",&ans);
-
-}
- 
-printf("\n");
-printf("ciao");
+char stringa[1000] ={  "molto bene"  }; printf("esempio per controllare funzionamento parametri OUT funzione\n");
+  passaStringa( stringa); 
+printf("%s\n", stringa);
 return ;
 
 }

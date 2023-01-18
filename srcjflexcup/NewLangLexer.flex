@@ -34,7 +34,7 @@ commentFinish = "*|"
 // Now for the actual tokens and assocated actions
 <YYINITIAL>{
     {commentStart} { yybegin(COMMENTO); }
-    {commentLine}  { System.out.println("Trovato commentoln: " + yytext());}
+    {commentLine}  { }
     "start:" { return new Symbol(sym.MAIN) ; }
     ";"     { return new Symbol(sym.SEMI); }
     ","     { return new Symbol(sym.COMMA); }
@@ -100,7 +100,6 @@ commentFinish = "*|"
 
 <COMMENTO> {
     ( [^*] | \* + [^|*] )* {commentFinish} {
-        System.out.println("Trovato commento: " + yytext());
         yybegin(YYINITIAL);
     }
 }

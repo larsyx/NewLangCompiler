@@ -62,21 +62,30 @@ public class CTranslate implements Visitor {
 
         String tipo = convertiTipi(e.type);
 
-        if(tipo.equals(STRING)){
-            for(Identifier id : e.id.ids) {
-                str += "" + CHAR + "*";
-                str += id.attrib + ",";
-            }
-            str = str.substring(0,str.length()-1);
-            return str;
-        }
+
 
         if(e.outOrIn.equals("IN")) {
+            if(tipo.equals(STRING)){
+                for(Identifier id : e.id.ids) {
+                    str += "" + CHAR + " ";
+                    str += id.attrib + "[],";
+                }
+                str = str.substring(0,str.length()-1);
+                return str;
+            }
             for(Identifier id: e.id.ids)
                 str += tipo + id.accept(this)+ ",";
             str = str.substring(0,str.length()-1);
         }
         else {
+            if(tipo.equals(STRING)){
+                for(Identifier id : e.id.ids) {
+                    str += "" + CHAR + " *";
+                    str += id.attrib + ",";
+                }
+                str = str.substring(0,str.length()-1);
+                return str;
+            }
             for (Identifier id : e.id.ids) {
                 str += tipo + "*" + id.attrib + ",";
                 outFun.add(id.attrib);
@@ -246,9 +255,13 @@ public class CTranslate implements Visitor {
                 if(in <= 0 )
                     if(temp.substring(1, 2).equals("*"))
                         temp = temp.substring(2, temp.length());
-                    else
-                        str += "&";
-
+                    else {
+                        if(exp instanceof Identifier) {
+                            Identifier temp1 = (Identifier) exp;
+                            if(!temp1.getType_node().equals(STRING))
+                                str += "&";
+                        }
+                    }
                 str += temp;
                 in--;
             }
@@ -276,26 +289,29 @@ public class CTranslate implements Visitor {
     public Object visit(ReadOp e) throws SemanticErrorException {
         String str ="";
 
+        ArrayList<Identifier> ids = new ArrayList<>();
+        for(Identifier i: e.idList.ids)
+            ids.add(0,i);
         str += "scanf(\"";
-        for(Identifier i: e.idList.ids) {
+        for(Identifier i: ids) {
             switch (i.getType_node()) {
                 case STRING:
-                    str += "%s,";
+                    str += "%s ";
                     break;
-                case BOOL:
+                case BOOLNEW:
                 case INTEGERNEW:
-                    str += "%d,";
+                    str += "%d ";
                     break;
                 case CHAR:
-                    str += "%c,";
+                    str += "%c ";
                     break;
                 case FLOAT:
-                    str += "%f,";
+                    str += "%f ";
                     break;
             }
         }
         str = str.substring(0, str.length()-1) + "\"";
-        for(Identifier i: e.idList.ids) {
+        for(Identifier i: ids) {
             if(i.getType_node().equals(STRING) || outFun!=null && outFun.contains(i.attrib))
                 str += "," + i.attrib;
             else
@@ -341,7 +357,7 @@ public class CTranslate implements Visitor {
                 case STRING:
                     str += "%s";
                     break;
-                case BOOL:
+                case BOOLNEW:
                 case INTEGERNEW:
                     str += "%d";
                     break;
@@ -790,7 +806,7 @@ public class CTranslate implements Visitor {
             case CHAR: return CHAR;
             case STRING : return STRING;
             case VOID: return VOID;
-            case BOOL: return BOOL;
+            case BOOLNEW: return BOOLC;
         }
         return null;
     }
@@ -802,5 +818,7 @@ public class CTranslate implements Visitor {
     public static final String CHAR = "char";
     public static final String STRING = "string";
     public static final String VOID = "void";
-    public static final String BOOL = "bool";
+    public static final String BOOLNEW = "boolean";
+    public static final String BOOLC = "bool";
+
 }

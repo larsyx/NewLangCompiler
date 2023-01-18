@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Programma5" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="main.NewLangStarter" />
+    <module name="Moscato_es5" />
+    <option name="PROGRAM_PARAMETERS" value="test/Programma5" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

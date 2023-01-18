@@ -89,6 +89,7 @@ public class TypeChecking implements Visitor {
 
         if(e.declList_f.accept(this).equals(NOTYPE) && e.main.accept(this).equals(NOTYPE) && e.declList_s.accept(this).equals(NOTYPE)){
             e.setType_node(NOTYPE);
+            checkFunCallParam();
             return NOTYPE;
         }
 
@@ -489,13 +490,27 @@ public class TypeChecking implements Visitor {
             else if(op.exprList == null ) {
                 throw new SemanticErrorException("errore paramentri chiamata funzione");
             }
-            else if(fun.paramDeclList.parDeclOps.size() == op.exprList.expList.size()) {
-                ParDeclOp declop = fun.paramDeclList.parDeclOps.get(0);
-                Exp exp = op.exprList.expList.get(0);
-                for (int i = 0; i < fun.paramDeclList.parDeclOps.size(); declop = fun.paramDeclList.parDeclOps.get(i), exp = op.exprList.expList.get(i), i++)
-                    if (!declop.accept(this).equals(exp.accept(this)))
-                        throw new SemanticErrorException("errore parametri chiamata funzione");
+            else{
+                int tot = 0;
+                for(ParDeclOp t: fun.paramDeclList.parDeclOps)
+                    tot += t.id.ids.size();
+                if(tot == op.exprList.expList.size()) {
+                    ParDeclOp declop;
+                    Exp exp;
+                    for (int i = 0, j=0; i <= fun.paramDeclList.parDeclOps.size() && j < op.exprList.expList.size();  i++) {
+                        declop = fun.paramDeclList.parDeclOps.get(i);
+                        exp = op.exprList.expList.get(j);
+                        for (Identifier id : declop.id.ids) {
+                            if (!declop.accept(this).equals(exp.accept(this)))
+                                throw new SemanticErrorException("errore parametri chiamata funzione");
+                            exp = op.exprList.expList.get(j++);
 
+                        }
+                    }
+                }
+                else{
+                    throw new SemanticErrorException("errore parametri chiamata funzione");
+                }
             }
         }
     }
