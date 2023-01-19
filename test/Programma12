@@ -1,0 +1,121 @@
+|| questo programma calcola le aree di diverse forme geometriche
+
+
+start:
+def aree(): void{
+    integer opz << scegliOpzione();
+    real risultato << 0.0;
+
+    if (opz <> -1) then{
+        if(opz = 0) then{
+            risultato << quadrato();
+        }
+        else{
+            if( opz = 1)then{
+                risultato << rettangolo();
+            }
+            else{
+                if(opz = 2)then{
+                    risultato << triangolo();
+                }
+                else{
+                    if(opz = 3) then{
+                        risultato << rombo();
+                    }
+                    else{
+                        if( opz = 4 ) then{
+                            risultato << cerchio();
+                        }
+                        else{
+                            if( opz = 5 ) then{
+                                risultato << trapezio();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    ("il risultato e': ", risultato)-->!;
+    return ;
+}
+
+def scegliOpzione(): integer{
+    integer scegli;
+    (" questo programma calcola l'area di diverse forme geometriche")-->!;
+    ("scegli tra le seguenti opzioni") -->!;
+    ("\t0 quadrato") -->!;
+    ("\t1 rettangolo") -->!;
+    ("\t2 triangolo") -->!;
+    ("\t3 rombo") -->!;
+    ("\t4 cerchio") -->!;
+    ("\t5 trapezio") -->!;
+    scegli <--;
+
+    if scegli <= 5 and scegli >= 0 then{
+        return scegli;
+    }
+    else{
+        ("input errato\n") -->!;
+    }
+    return -1;
+}
+
+
+def quadrato(): real{
+    real l;
+    ("hai scelto quadrato") -->!;
+    ("inserisci lunghezza lato: ") -->;
+    l <--;
+    l << l^2;
+    return l;
+}
+
+def rettangolo(): real{
+    real l,h;
+    ("hai scelto rettangolo") -->!;
+    ("inserisci lunghezza lato: ") -->!;
+    l <--;
+    ("inserisci lunghezza altezza: ") -->!;
+    h <--;
+    return l*h;
+
+}
+def triangolo(): real{
+    real l,h;
+    ("hai scelto triangolo") -->!;
+    ("inserisci lunghezza lato: ") -->!;
+    l <--;
+    ("inserisci lunghezza altezza: ") -->!;
+    h <--;
+    return l*h/2;
+}
+def rombo(): real{
+    real d1,d2;
+    ("hai scelto rombo") -->!;
+    ("inserisci diagonale minore: ") -->!;
+    d1 <--;
+    ("inserisci diagonale maggiore: ") -->!;
+    d2 <--;
+    return d1*d2/2;
+}
+def cerchio(): real{
+    real r;
+    ("hai scelto cerchio") -->!;
+    ("inserisci raggio: ") -->!;
+    r <--;
+    return r^2 * 3.14;
+}
+
+def trapezio(): real{
+    real b1,b2,h;
+    ("hai scelto trapezio") -->!;
+    ("inserisci base minore: ") -->!;
+    b1 <--;
+    ("inserisci base maggiore: ") -->!;
+    b2 <--;
+    ("inserisci altezza: ") -->!;
+    h <--;
+    return (b2-b1)*h/2;
+}

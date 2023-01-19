@@ -29,6 +29,7 @@ char = (\'.\')
 commentLine = "||" [^\r\n]* {lineTerminator}?  //aggiungere commenti
 commentStart = "|*"
 commentFinish = "*|"
+ne = "!=" | "<>"
 
 %%
 // Now for the actual tokens and assocated actions
@@ -87,7 +88,7 @@ commentFinish = "*|"
     "<="    { return new Symbol(sym.LE); }
     ">"     { return new Symbol(sym.GT); }
     ">="    { return new Symbol(sym.GE); }
-    ["<>""!="] { return new Symbol(sym.NE); }
+    {ne}  { return new Symbol(sym.NE); }
     "and"   { return new Symbol(sym.AND); }
     "or"    { return new Symbol(sym.OR); }
     "not"   { return new Symbol(sym.NOT); }

@@ -156,8 +156,7 @@ WhileStat ::= WHILE Expr:i LOOP Body:b    {: RESULT = new WhileOp(i,b); :}
 ForStat ::= FOR ID:id ASSIGN INTEGER_CONST:i1 TO INTEGER_CONST:i2 LOOP Body:b    {: RESULT = new ForOp(id,i1,i2,b); :}
 ;
 
-ReadStat ::= IdList:il READ STRING_CONST    //{: RESULT = new :}
-	        |  IdList:il READ           {: RESULT = new ReadOp(il); :}
+ReadStat ::=  IdList:il READ           {: RESULT = new ReadOp(il); :}
 ;
 
 IdList ::= ID:i                         {: RESULT = new IdentifierList(i); :}

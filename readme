@@ -1,0 +1,20 @@
+
+AVVIO
+    - Per compilare il programma e produrre il file scritto in C sono stati creati diversi test da compilare ed eseguire da intellij;
+    - Il file C generato è presente nella directory compileResult;
+    - Per compilare ed eseguire il programma scritto in C basta eseguire lo script starter.sh;
+
+
+SCELTE DI IMPLEMENTAZIONE
+    - Operazione di confronto tra 2 stringhe non supportato;
+    - Definizione stringhe attraverso doppi apici ";
+    - Ogni funzione deve avere return;
+    - La concatenazione di stringhe può avvenire solo tra due stringhe per la stampa usare la virgola;
+        es. ("stampo numero:" , numero , "e" , secondo numero); -->!; dove numero e secondo numero sono interi;
+    - Durante una chiamata a funzione i parametri out non hanno bisogno di @;
+    - Esiste solo l'operatore DivOp, DivIntOp non implementato;
+    - Tutte le variabili anche quelle globali per essere usate devono essere dichiarate precedentemente;
+    - Non è possibile inserire nomi di variabili che sono key-word in c es. integer int o real float;
+    - Firma main start: def <id>():void
+    - alcune operazioni sulle stringhe potrebbero generare errori nel programma C generato;
+    - operazione di read non accetta la forma "ReadStat -> IdList READ STRING_CONST"

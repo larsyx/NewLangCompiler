@@ -1,0 +1,107 @@
+|| questo programma ad ogni input del utente aggiunge parole a una stringa
+
+
+
+
+var stringa << "";
+
+def scegliModalita(): boolean{
+    integer opz;
+    ("scegli modalita' programma")-->!;
+    ("0 opzione senza passaggio di parametri")-->!;
+    ("1 opzione con passaggio di parametri") -->!;
+    opz <--;
+    if(opz = 0)then{
+        return false;
+    }
+    if(opz = 1)then{
+        return true;
+    }
+    else{
+        ("input non corretto riprova\n") -->!;
+        return scegliModalita();
+    }
+
+}
+
+start:
+def inizio():void{
+
+    var flag << true, opz << 0, parPass << false;
+    parPass << scegliModalita();
+    ("questo programma permette di aggiungere testo a una stringa") -->!;
+    while flag loop{
+        ("scegli tra le opzioni:")-->!;
+        (" 0 stampa stringa")-->!;
+        (" 1 concatena nuova stringa")-->!;
+        (" 2 concatena nuova stringa precedentemente")-->!;
+        (" 3 esci dal programma stringa")-->!;
+        ("inserisci opzione:")-->;
+        opz <--;
+        if( opz <= 3 and opz >=0 and not parPass)then{
+            flag << scegliOperazione(opz);
+        }
+        else{
+            if( opz <= 3 and opz >=0 and parPass)then{
+                flag << scegliOperazionePar(opz, stringa);
+            }
+            else{
+                ("input non valido") -->!;
+            }
+        }
+    }
+    stringa <<"ciao";
+    return;
+}
+
+
+def scegliOperazione(integer opz): boolean{
+    if(opz = 0)then{
+        ("stampo stringa\n", stringa) -->!;
+        return true;
+    }
+    if( opz = 1)then{
+        string newString;
+        ("inserisci nuova stringa:")-->;
+        newString <--;
+        stringa << stringa & newString;
+        return true;
+    }
+    if( opz = 2)then{
+        string newString;
+        ("inserisci nuova stringa:")-->;
+        newString <--;
+        stringa << newString & stringa;
+        return true;
+    }
+    if( opz = 3) then{
+        return false;
+    }
+    return false;
+}
+
+
+def scegliOperazionePar(integer opz | out string str): boolean{
+    if(opz = 0)then{
+        ("stampo stringa\n", str) -->!;
+        return true;
+    }
+    if( opz = 1)then{
+        string newString;
+        ("inserisci nuova stringa:")-->;
+        newString <--;
+        str << str & newString;
+        return true;
+    }
+    if( opz = 2)then{
+        string newString;
+        ("inserisci nuova stringa:")-->;
+        newString <--;
+        str << newString & str;
+        return true;
+    }
+    if( opz = 3) then{
+        return false;
+    }
+    return false;
+}

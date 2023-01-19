@@ -56,7 +56,7 @@ public class NewLangStarter {
     }
 
     public static File newFile() {
-        String path = "./programma.c";
+        String path = "./compileResult/programma.c";
         try {
             File file = new File(path);
             if (file.exists())
