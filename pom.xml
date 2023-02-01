@@ -40,7 +40,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>src/Parser</outputDirectory>
+                            <outputDirectory>src</outputDirectory>
                             <lexDefinitions>
                                 <lexDefinition>srcjflexcup</lexDefinition>
                             </lexDefinitions>
