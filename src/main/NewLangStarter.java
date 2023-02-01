@@ -9,11 +9,20 @@ import VisitorPattern.Program.ProgramOp;
 import Traduzione.CTranslate;
 
 import java.io.*;
+import java.util.StringTokenizer;
 
 public class NewLangStarter {
 
+
+    static String nomeFile;
     public static void main(String[] args){
         try {
+            StringTokenizer strt = new StringTokenizer(args[0], "/");
+            while(strt.hasMoreTokens())
+                nomeFile = strt.nextToken();
+            if(nomeFile.substring(nomeFile.length()-4,nomeFile.length()).equals(".txt"))
+                nomeFile = nomeFile.substring(0, nomeFile.length()-4);
+
             parser p = new parser(new Lexer(new FileReader(args[0])));
 
             ProgramOp op = (ProgramOp) p.parse().value;
@@ -32,7 +41,7 @@ public class NewLangStarter {
             String str = "";
             CTranslate ct = new CTranslate();
             String traslate = (String) op.accept(ct);
-            System.out.println(traslate);
+            //System.out.println(traslate);
 
             File file = newFile();
             scriviFile(file, traslate);
@@ -56,9 +65,11 @@ public class NewLangStarter {
     }
 
     public static File newFile() {
-        String path = "./compileResult/programma.c";
+        String path = "." + File.separator + "test_files"+ File.separator + "c_out" + File.separator + nomeFile+".c";
+
         try {
             File file = new File(path);
+            File file2 = new File(path);
             if (file.exists())
                 file.delete();
 

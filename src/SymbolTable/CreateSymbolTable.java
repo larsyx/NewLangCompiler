@@ -164,7 +164,6 @@ public class CreateSymbolTable implements Visitor {
     }
 
     public Object visit(ForOp e) throws SemanticErrorException {
-        current.addSymbol(new NewLangSymbol("forOp", "forOp", "", "from " + e.intConst.attrib + "to " + e.toIntConst.attrib));
         e.intConst.accept(this);
         e.toIntConst.accept(this);
 
@@ -192,7 +191,6 @@ public class CreateSymbolTable implements Visitor {
 
         e.expression.accept(this);
 
-        current.addSymbol(new NewLangSymbol("IfOp", "IfOp", "", "then"));
         SymbolTable symbolTable = new SymbolTable("IfOp", current);
         tables.add(symbolTable);
 
@@ -202,7 +200,6 @@ public class CreateSymbolTable implements Visitor {
         current = current.typeEnvironment;
 
         if(e.elseBody !=null) {
-            current.addSymbol(new NewLangSymbol("IfOp", "IfOp", "", "else"));
             symbolTable = new SymbolTable("IfOpElse", current);
             tables.add(symbolTable);
             current = symbolTable;
@@ -230,8 +227,6 @@ public class CreateSymbolTable implements Visitor {
     public Object visit(WhileOp e) throws SemanticErrorException {
 
         e.expression.accept(this);
-
-        current.addSymbol(new NewLangSymbol("WhileOp", "WhileOp", ""));
 
         SymbolTable symbolTable = new SymbolTable("WhileOp", current);
         tables.add(symbolTable);
