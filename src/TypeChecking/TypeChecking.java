@@ -284,7 +284,9 @@ public class TypeChecking implements Visitor {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
 
-        return OperatorsTables.opt(OperatorsTables.EQ, left, right);
+        String type = OperatorsTables.opt(OperatorsTables.EQ, left, right);
+        e.setType_node(type);
+        return type;
     }
 
     @Override
@@ -516,7 +518,7 @@ public class TypeChecking implements Visitor {
     }
 
     private void saveFunOp(ProgramOp op){
-        funOps.put(op.main.type,op.main);
+        funOps.put(op.main.id.attrib,op.main);
         if(op.declList_f.funDeclList!=null)
             for(FunOp fun: op.declList_f.funDeclList)
                 funOps.put(fun.id.attrib,fun);

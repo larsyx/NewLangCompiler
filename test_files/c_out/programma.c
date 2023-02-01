@@ -4,65 +4,82 @@
 #include <math.h>
 #include <stdbool.h>
 
-int  fibonacci(  int i);
+int  scegliOpzione();
+float  operazione(  int opz);
 void main ();
-int   result =  1 ;bool   b =  true ;
-int  fibonacci(  int i){
-int   c1 =  1 ;
-int   c2 =  2 ;
-  if(   i== 0   ) {
- return  1 ;
+float   op2, op1;
+int  scegliOpzione(){
+int   opzione;
+ printf("Scegli opzione: \n");
+printf("opzione 1: somma \n");
+printf("opzione 2: sottrazione\n");
+printf("opzione 3: prodotto\n");
+printf("opzione 4: divisione\n");
+printf("opzione 5: potenza\n");
+scanf("%d",&opzione);
+ opzione=  opzione- 2  ;
+ if(    opzione>= 6  ||  opzione< 1    ) {
+  opzione=  scegliOpzione();
 
 }
  
- if(   i== 1   ) {
- return  1 ;
+return  opzione;
 
 }
-else {
-int   i1 =   i- c1 ;
-int   i2 =   i- c2 ;
-int   r2, r1;
-  r1=  fibonacci( i1);
- r2=  fibonacci( i2);
-return   r1+ r2 ;
+
+
+
+
+float  operazione(  int opz){
+float   risultato;
+ printf("inserisci primo numero:");
+scanf("%f",&op1);
+printf("inserisci secondo numero:");
+scanf("%f",&op2);
+ if(   opz== 1   ) {
+  risultato=  op1+ op2 ;
 
 }
  
+ if(   opz== 2   ) {
+  risultato=  op1- op2 ;
 
 }
+ 
+ if(   opz== 3   ) {
+  risultato=  op1* op2 ;
 
+}
+ 
+ if(   opz== 4   ) {
+  risultato=  op1/ op2 ;
 
+}
+ 
+ if(   opz== 5   ) {
+ return pow( op1, op2) ;
+
+}
+ 
+return  risultato;
+
+}
 
 
 
 void main (){
-int   intero;
- printf("inserisci un numero per estrarre numero di fibonacci\n");
-printf("scegli un numero positivo:");
-scanf("%d",&intero);
- if(   intero< 0   ) {
- printf("numero non corretto\n");
-return ;
-
-}
-else {
-  result=  fibonacci( intero);
-for( int  i =  0 ;  i <  5 ;  i++){
-  if(  b ) {
- printf("numero di fibonacci: %d", result);
-printf(" stampo b:%d\n", b);
- b= false ;
-
-}
- 
+int   flag =  1 ;
+  while(  flag== 1  ){
+int   opzione =   scegliOpzione();
+float   risultato;
+  risultato=  operazione( opzione);
+printf("Risultato operazione: %f\n", risultato);
+printf("Vuoi fare un'altra operazione? (1:si 0:no): ");
+scanf("%d",&flag);
 
 }
  
 return ;
-
-}
- 
 
 }
 

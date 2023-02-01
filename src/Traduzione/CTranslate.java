@@ -128,6 +128,16 @@ public class CTranslate implements Visitor {
                         }
                 funopParam.put(fun.id.attrib , i);
             }
+
+        i=0;
+        if(e.main != null && e.main.paramDeclList != null)
+            for (ParDeclOp par : e.main.paramDeclList.parDeclOps)
+                if(par !=null && par.outOrIn.equals("IN")){
+                    int temp = par.id.ids.size();
+                    i+= temp;
+                }
+        funopParam.put(e.main.id.attrib , i);
+
         String str3 ="";
         str3 += e.declList_f.accept( this);
         str3 += e.declList_s.accept(this);
@@ -189,7 +199,7 @@ public class CTranslate implements Visitor {
     public Object visit(AssignOp e) throws SemanticErrorException {
         String str =" ";
 
-        Identifier id = e.idList.ids.get(0);
+        Identifier id = e.idList.ids.get(e.idList.ids.size()-1);
         Exp ex = e.exprList.expList.get(0);
         if(id.getType_node().equals(STRING)){
             String exString = (String) ex.accept(this);
@@ -205,7 +215,10 @@ public class CTranslate implements Visitor {
         }
         if(str.substring(str.length()-1,str.length()).compareTo(";")!=0 && str.substring(str.length()-2,str.length()-1).compareTo(";")!=0 && str.substring(str.length()-3,str.length()-2).compareTo(";")!=0)
             str += ";\n";
-        for(int i= 1; i < e.idList.ids.size(); i++, ex = e.exprList.expList.get(i), id = e.idList.ids.get(i)){
+
+        for(int i= 1, j = e.idList.ids.size()-2; i < e.idList.ids.size();  i++,j--){
+            ex = e.exprList.expList.get(i);
+            id = e.idList.ids.get(j);
             if(id.getType_node().equals(STRING)){
                 String exString = (String) ex.accept(this);
                 if(exString.substring(exString.length()-2, exString.length()-1).equals(";"))
@@ -229,14 +242,28 @@ public class CTranslate implements Visitor {
     public Object visit(ForOp e) throws SemanticErrorException {
         String str ="for(";
 
+        String from_string = (String) e.intConst.accept(this);
+        String to_string = (String) e.toIntConst.accept(this);
+        int from = Integer.parseInt(from_string.substring(1,2));
+        int to = Integer.parseInt(to_string.substring(1,2));
+
         str += " int ";
         String variabile = (String) e.id.accept(this);
         str += variabile;
         str += " = ";
-        str += e.intConst.accept(this);
-        str += "; "+ variabile +" < ";
-        str += e.toIntConst.accept(this);
-        str += "; " + variabile +"++)";
+        str += from_string;
+        str += "; "+ variabile;
+        if(from < to)
+            str +=" < ";
+        else
+            str +=" > ";
+        str += to_string;
+        str += "; " + variabile;
+        if(from < to)
+            str +="++)";
+        else
+            str +="--)";
+
         str += e.bodyOp.accept(this);
 
         str +=" ";
@@ -456,11 +483,29 @@ public class CTranslate implements Visitor {
     }
 
     public Object visit(EQOp e) throws SemanticErrorException {
+        boolean string=false;
+        String str =" ";
 
         if(isWriting)
             return e.getType_node();
 
-        String str =" ";
+        if(e.left instanceof Identifier) {
+            Identifier l = (Identifier) e.left;
+            if(l.getType_node().equals("string"))
+                string=true;
+        }
+        if(e.right instanceof Identifier) {
+            Identifier l = (Identifier) e.left;
+            if(l.getType_node().equals("string"))
+                string=true;
+        }
+
+        if(e.left instanceof String_const || e.right instanceof String_const || string) {
+            str += "strcmp(";
+            str += e.left.accept(this) + ", " + e.right.accept(this)+ ") == 0";
+            str += " ";
+            return str;
+        }
 
         str += e.left.accept(this);
         str += "==";

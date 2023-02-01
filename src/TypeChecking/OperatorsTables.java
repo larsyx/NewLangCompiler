@@ -67,7 +67,6 @@ public class OperatorsTables {
             case GE:
             case LT:
             case LE:
-            case EQ:
             case NE:
                 if(typeLeft.equals("integer") && typeRight.equals("integer"))
                     return "boolean";
@@ -81,6 +80,19 @@ public class OperatorsTables {
                     throwException(typeLeft,typeRight,operator);
                 break;
 
+            case EQ:
+                if(typeLeft.equals("integer") && typeRight.equals("integer"))
+                    return "boolean";
+                else if(typeLeft.equals("integer") && typeRight.equals("float"))
+                    return "boolean";
+                else if(typeLeft.equals("float") && typeRight.equals("integer"))
+                    return "boolean";
+                else if(typeLeft.equals("float") && typeRight.equals("float"))
+                    return "boolean";
+                else if(typeLeft.equals("string") && typeRight.equals("string"))
+                    return "boolean";
+                    throwException(typeLeft,typeRight,operator);
+                break;
             default:
                 throwException(operator);
 

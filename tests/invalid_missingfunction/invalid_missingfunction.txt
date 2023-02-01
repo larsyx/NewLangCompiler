@@ -1,27 +1,27 @@
 |* Programma di esempio del linguaggio newLang che da la possibilita all'utente di effettuare
-    delle operazioni aritmetiche tra due numeri|
+    delle operazioni aritmetiche tra due numeri*|
 
 
 
-def somma(float a, b): float
+def somma(real a, b): real
 {
 	return a+b;
 }
 
 
-def differenza(float a | float b): float
+def differenza(real a | real b): real
 {
 	return a-b;
 }
 
 
-def prodotto(float a, b): float
+def prodotto(real a, b): real
 {
 	return a*b;
 }
 
 
-def divisione(float a, b): float
+def divisione(real a, b): real
 {
 	return a/b;
 }
@@ -54,14 +54,15 @@ start:
 def esempio() : void {
 
     integer op,comando<<-1;
-    float risultato,a,b;
+    real risultato,a,b;
     integer c, fibRes;
 
     while comando!=0 loop {
 
         ("1) Visualizza Menù") -->!;
         ("0) Termina") -->!;
-        comando <-- "Inserisci comando:";
+        ("Inserisci comando:") -->!;
+        comando <-- ;
 
 
 
@@ -69,11 +70,14 @@ def esempio() : void {
         {
             op<<menu();
             if op!=7 then {
-                a <-- "Inserisci il primo numero reale:";
-                b <-- "Inserisci il secondo numero reale:";
+                ("Inserisci il primo numero reale:")-->!;
+                a <-- ;
+                ("Inserisci il secondo numero reale:")-->!;
+                b <-- ;
             }
             else {
-                c <-- "Inserisci un intero:";
+                ("Inserisci un intero:")-->!;
+                c <-- ;
             }
 
             if op=2 then
@@ -132,10 +136,13 @@ def menu(): integer
 	("6) Potenza") -->!;
 	("7) Fibonacci") -->!;
 
-	op <-- "Inserisci operazione:";
+    ("Inserisci operazione:") -->!;
+	op <-- ;
 	while op<2 or op>7 loop
 	    {
-		    op <-- "Operazione non valida [2-7], inserisci operazione:";
+
+	        ("Operazione non valida [2-7], inserisci operazione:")-->!;
+		    op <-- ;
 		}
 
 	return op;

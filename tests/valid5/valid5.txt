@@ -1,6 +1,6 @@
 |*
  Programma esemplificativo del linguaggio NewLang
-|
+*|
 
 
 
@@ -17,45 +17,51 @@ def esempio() : void {
 
     string taglia, ans1;
     var ans << "no";
-    float risultato << sommac(a, x, b, taglia);
+    real risultato << sommac(a, x, b, taglia);
 
 
-    stampa("la somma di " & a & " e " & b & " incrementata di " & c & " è " & taglia);
-    stampa("ed è pari a " & risultato);
+    stampa("la somma di " & " e " & " incrementata di " &  " è " & taglia);
+    stampa("ed è pari a " & "risultato");
 
 	("vuoi continuare? (si/no) - inserisci due volte la risposta")  -->! ;
 	ans, ans1 <--;
-    while ans = "si" loop {
 
-        a <-- "inserisci un intero:";
-        b <-- "inserisci un reale:";
+    while ans = "si" loop{
+        ("inserisci un intero:") -->!;
+        a <--;
+        ("inserisci un reale:") -->!;
+        b <--;
         risultato << sommac(a, x, b, taglia);
-        stampa("la somma di " & a & " e " & b &  " incrementata di " & c & " è " & taglia);
-        stampa(" ed è pari a " & risultato);
-        ans <-- "vuoi continuare? (si/no):";
+        stampa("la somma di " & " e " & " incrementata di " &  " è " & taglia);
+        stampa("ed è pari a " & "risultato");
+        ("vuoi continuare? (si/no):") -->!;
+        ans <-- ;
     }
 
     ("") -->! ;
     ("ciao") -->;
+    return;
 }
 
 
 def stampa(string messaggio): void {
 
+    integer i<<0
+    ;
     integer a<<i;
-    integer i;
+
 	for x << 4 to 1 loop {
 		("") -->! ;
 	}
 
 	(messaggio) -->! ;
-
+    return;
 }
 
 
-def sommac(integer a, d | float b | out string size): float
+def sommac(integer a, d | real b | out string size): real
 {
-	float result;
+	real result;
 
 
 	result  <<  a + b + c + d;

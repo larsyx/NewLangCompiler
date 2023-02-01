@@ -1,22 +1,155 @@
-real f;
+|* Programma di esempio del linguaggio newLang che da la possibilita all'utente di effettuare
+    delle operazioni aritmetiche tra due numeri*|
+
+
+
+def somma(real a, b): real
+{
+	return a+b;
+}
+
+
+def differenza(real a | real b): real
+{
+	return a-b;
+}
+
+
+def prodotto(real a, b): real
+{
+	return a*b;
+}
+
+
+def divisione(real a, b): real
+{
+	return a/b;
+}
+
+def potenza(real a, b): real
+{
+
+	return a^b;
+}
+
+def succ_fibonacci(integer i): integer {
+
+    if i<0 then{
+        return 0;
+    }else {
+        if i=0 then {
+            return 0;
+        }
+        else
+        {
+            if i=1 then {
+                return 1;
+            }
+
+
+        }
+    }
+
+    return "ciao";
+}
 
 
 start:
-def main(integer t,pp | real s | out string size): void {
-    var tp << 4;
-    integer i << 0;
-    f << 1.5;
+def esempio() : void {
 
-    for i << 1 to 10 loop {
-        f <<  s + f ;
-        tp << 1 -2;
+    integer op,comando<<-1;
+    real risultato,a,b;
+    integer c, fibRes;
+
+    while comando!=0 loop {
+
+        ("1) Visualizza Menù") -->!;
+        ("0) Termina") -->!;
+        ("Inserisci comando:")-->!;
+        comando <-- ;
+
+
+
+        if comando=1 then
+        {
+            op<<menu();
+            if op!=7 then {
+                ("Inserisci il primo numero reale:")-->!;
+                a <-- ;
+                ("Inserisci il secondo numero reale:")-->!;
+                b <-- ;
+            }
+            else {
+                ("Inserisci un intero:")-->!;
+                c <-- ;
+            }
+
+            if op=2 then
+            {
+                risultato << somma(a, b);
+            }else{
+                if op=3 then
+                {
+                    risultato << differenza(a, b);
+                }else{
+                    if op=4 then
+                    {
+                        risultato << prodotto(a, b);
+                    }else{
+                        if op=5 then
+                        {
+                            risultato << divisione(a, b);
+                        }else{
+                            if op=6 then
+                            {
+                                risultato << potenza(a, b);
+                            }else{
+                                fibRes << succ_fibonacci(c);
+                            }
+
+                        }
+
+                    }
+                }
+            }
+            if op!=7 then {
+                             ("Il risultato dell'operazione scelta è :", risultato) -->! ;
+                        }
+                        else {
+                            ("Il risultato dell'operazione scelta è :", fibRes) -->! ;
+                        }
+
+        }
+
     }
 
-    while(i < 20 or tp >-15) loop{
-        i << i+1;
-        tp << i - 2;
-    }
-    return ;
+
+    ("Ciao") --> ;
+    return;
 }
+
+
+def menu(): integer
+{
+	integer op;
+	("--------Menu--------")-->!;
+	("2) Addizione") -->!;
+	("3) Sottrazione") -->!;
+	("4) Moltiplicazione") -->!;
+	("5) Divisione") -->!;
+	("6) Potenza") -->!;
+	("7) Fibonacci") -->!;
+
+    ("Inserisci operazione:")-->!;
+	op <-- ;
+	while op<2 or op>7 loop
+	    {
+	        ("Operazione non valida [2-7], inserisci operazione:")-->!;
+		    op <-- ;
+		}
+
+	return op;
+}
+
 
 
