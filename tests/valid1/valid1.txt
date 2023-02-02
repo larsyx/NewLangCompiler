@@ -45,17 +45,14 @@ def esercizio() : void {  || funzione principale
 	ans, ans1 <--;
     while ans = "si" loop {
 
-        ("inserisci un intero:") -->!;
-        a <-- ;
-        ("inserisci un reale:") -->!;
-        b <-- ;
+        a <-- "inserisci un intero:";
+        b <-- "inserisci un reale:";
         risultato << sommac(a, x, b, taglia);
         stampa("la somma  incrementata  è " );
         (taglia) -->!;
         stampa(" ed è pari a " );
         (risultato) -->!;
-        ("vuoi continuare? (si/no):") -->!;
-        ans <-- ;
+        ans <-- "vuoi continuare? (si/no):";
     }
 
     ("") -->! ;
@@ -73,7 +70,7 @@ def stampa(string messaggio): void {  || funzione di stampa
 	}
 
 	(messaggio) -->! ;
-
     return;
-
 }
+
+

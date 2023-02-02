@@ -10,9 +10,7 @@ AVVIO
 
 
 SCELTE DI IMPLEMENTAZIONE
-    - I commenti finiscono per *|;
     - i numeri reali sono definiti da real;
-    - Definizione stringhe attraverso doppi apici ";
     - Ogni funzione deve avere return;
     - La concatenazione di stringhe può avvenire solo tra due stringhe per la stampa usare la virgola;
         es. ("stampo numero:" , numero , "e" , secondo numero); -->!; dove numero e secondo numero sono interi;
@@ -21,4 +19,3 @@ SCELTE DI IMPLEMENTAZIONE
     - Tutte le variabili anche quelle globali per essere usate devono essere dichiarate precedentemente;
     - Non è possibile inserire nomi di variabili che sono key-word in c es. integer int o real float;
     - Firma main start: def <id>():void
-    - Operazione di read non accetta la forma "ReadStat -> IdList READ STRING_CONST"

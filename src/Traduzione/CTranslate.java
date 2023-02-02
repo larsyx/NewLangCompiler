@@ -317,6 +317,12 @@ public class CTranslate implements Visitor {
     public Object visit(ReadOp e) throws SemanticErrorException {
         String str ="";
 
+        if(e.string_const!=null){
+            String sc = (String) e.string_const.accept(this);
+            sc = sc.substring(0,sc.length()-2);
+            str += "printf(" + sc + "\\n\");\n";
+        }
+
         ArrayList<Identifier> ids = new ArrayList<>();
         for(Identifier i: e.idList.ids)
             ids.add(0,i);

@@ -1,155 +1,76 @@
-|* Programma di esempio del linguaggio newLang che da la possibilita all'utente di effettuare
-    delle operazioni aritmetiche tra due numeri*|
+|*
+ Programma esemplificativo del linguaggio NewLang
+|
 
 
-
-def somma(real a, b): real
+def sommac(integer a, d | real b | out string size): real
 {
-	return a+b;
+	real result;
+
+
+	result  <<  a + b + c + d;
+
+	if result > 100 then{
+		var valore << "grande";
+ 		size << valore; }
+	else {
+		var valore << "piccola";
+ 		size << valore;
+	}
+
+	return result;
 }
 
 
-def differenza(real a | real b): real
-{
-	return a-b;
-}
-
-
-def prodotto(real a, b): real
-{
-	return a*b;
-}
-
-
-def divisione(real a, b): real
-{
-	return a/b;
-}
-
-def potenza(real a, b): real
-{
-
-	return a^b;
-}
-
-def succ_fibonacci(integer i): integer {
-
-    if i<0 then{
-        return 0;
-    }else {
-        if i=0 then {
-            return 0;
-        }
-        else
-        {
-            if i=1 then {
-                return 1;
-            }
-
-
-        }
-    }
-
-    return "ciao";
-}
+var c << 1;
 
 
 start:
-def esempio() : void {
-
-    integer op,comando<<-1;
-    real risultato,a,b;
-    integer c, fibRes;
-
-    while comando!=0 loop {
-
-        ("1) Visualizza Menù") -->!;
-        ("0) Termina") -->!;
-        ("Inserisci comando:")-->!;
-        comando <-- ;
+def esercizio() : void {  || funzione principale
 
 
+    var a << 1, b << 2.2, x << 3;
 
-        if comando=1 then
-        {
-            op<<menu();
-            if op!=7 then {
-                ("Inserisci il primo numero reale:")-->!;
-                a <-- ;
-                ("Inserisci il secondo numero reale:")-->!;
-                b <-- ;
-            }
-            else {
-                ("Inserisci un intero:")-->!;
-                c <-- ;
-            }
+    string taglia, ans1;
+    var ans << "no";
+    real risultato << sommac(a, x, b, taglia);
 
-            if op=2 then
-            {
-                risultato << somma(a, b);
-            }else{
-                if op=3 then
-                {
-                    risultato << differenza(a, b);
-                }else{
-                    if op=4 then
-                    {
-                        risultato << prodotto(a, b);
-                    }else{
-                        if op=5 then
-                        {
-                            risultato << divisione(a, b);
-                        }else{
-                            if op=6 then
-                            {
-                                risultato << potenza(a, b);
-                            }else{
-                                fibRes << succ_fibonacci(c);
-                            }
 
-                        }
+    stampa("la somma  incrementata  è " );
+    (taglia) -->!;
+     stampa(" ed è pari a " );
+     (risultato) -->!;
 
-                    }
-                }
-            }
-            if op!=7 then {
-                             ("Il risultato dell'operazione scelta è :", risultato) -->! ;
-                        }
-                        else {
-                            ("Il risultato dell'operazione scelta è :", fibRes) -->! ;
-                        }
+	("vuoi continuare? (si/no) - inserisci due volte la risposta")  -->! ;
+	ans, ans1 <--;
+    while ans = "si" loop {
 
-        }
-
+        a <-- "inserisci un intero:";
+        b <-- "inserisci un reale:";
+        risultato << sommac(a, x, b, taglia);
+        stampa("la somma  incrementata  è " );
+        (taglia) -->!;
+        stampa(" ed è pari a " );
+        (risultato) -->!;
+        ans <-- "vuoi continuare? (si/no):";
     }
 
-
-    ("Ciao") --> ;
+    ("") -->! ;
+    ("ciao") -->;
     return;
 }
 
 
-def menu(): integer
-{
-	integer op;
-	("--------Menu--------")-->!;
-	("2) Addizione") -->!;
-	("3) Sottrazione") -->!;
-	("4) Moltiplicazione") -->!;
-	("5) Divisione") -->!;
-	("6) Potenza") -->!;
-	("7) Fibonacci") -->!;
+def stampa(string messaggio): void {  || funzione di stampa
 
-    ("Inserisci operazione:")-->!;
-	op <-- ;
-	while op<2 or op>7 loop
-	    {
-	        ("Operazione non valida [2-7], inserisci operazione:")-->!;
-		    op <-- ;
-		}
+    integer a;
+    integer i;
+	for x << 4 to 1 loop {
+		("") -->! ;
+	}
 
-	return op;
+	(messaggio) -->! ;
+    return;
 }
-
 
 

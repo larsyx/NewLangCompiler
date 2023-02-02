@@ -29,7 +29,7 @@ str = (\"[^\"]*\")
 char = (\'.\')
 commentLine = "||" [^\r\n]* {lineTerminator}?  //aggiungere commenti
 commentStart = "|*"
-commentFinish = "*|"
+commentFinish = "|"
 ne = "!=" | "<>"
 
 %%
@@ -101,7 +101,7 @@ ne = "!=" | "<>"
 }
 
 <COMMENTO> {
-    ( [^*] | \* + [^|*] )* {commentFinish} {
+    ([^|])* {commentFinish} {
         yybegin(YYINITIAL);
     }
 }

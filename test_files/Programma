@@ -1,4 +1,4 @@
-
+|*Programma1*|
 
 real op1, op2;
 
@@ -14,7 +14,6 @@ def scegliOpzione(): integer {
 
     opzione <--;
 
-    opzione << opzione- 2 ;
     if (opzione >= 6 or opzione < 1) then {
         opzione << scegliOpzione();
     }
@@ -31,9 +30,7 @@ def main(): void {
         real risultato;
         risultato << operazione(opzione);
         ("Risultato operazione: ", risultato) -->!;
-
-        ("Vuoi fare un'altra operazione? (1:si 0:no): ") -->;
-        flag <-- ;
+        flag <-- "Vuoi fare un'altra operazione? (1:si 0:no): ";
     }
     return;
 }

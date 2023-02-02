@@ -157,6 +157,7 @@ ForStat ::= FOR ID:id ASSIGN INTEGER_CONST:i1 TO INTEGER_CONST:i2 LOOP Body:b   
 ;
 
 ReadStat ::=  IdList:il READ           {: RESULT = new ReadOp(il); :}
+            | IdList:il READ STRING_CONST:s {:RESULT = new ReadOp(il,s); :}
 ;
 
 IdList ::= ID:i                         {: RESULT = new IdentifierList(i); :}

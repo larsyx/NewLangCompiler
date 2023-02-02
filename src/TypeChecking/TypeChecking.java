@@ -198,6 +198,13 @@ public class TypeChecking implements Visitor {
     @Override
     public Object visit(ReadOp e) throws SemanticErrorException {
 
+        if( e.string_const !=null){
+            if(!e.string_const.accept(this).equals(STRING)) {
+                e.setType_node(ERROR);
+                throw new SemanticErrorException("Errore readOp parametro non è di tipo stringa");
+            }
+        }
+
         if(!(e.idList.accept(this).equals(NOTYPE)))
             e.setType_node(ERROR);
 

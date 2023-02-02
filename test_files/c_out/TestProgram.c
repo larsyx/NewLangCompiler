@@ -25,6 +25,8 @@ return  result;
 }
 
 
+
+
 void  stampa(  char messaggio[]){
 int   a;
 int   i;
@@ -40,37 +42,29 @@ return ;
 
 
 
-
-
 void main (){
-int   ans =  0 ;
-int   c =  2 ;
-int   x, a;
-float   b;
-char taglia[1000] ;float   risultato;
-  a= 1 ;
-b= 2.2 ;
-x= 3 ;
-printf("%d\n", c);
- risultato=  sommac( a, x, b, taglia);
-  stampa( "la somma  incrementata  è " ); 
+int   a =  1 ;
+float   b =  2.2 ;
+int   x =  3 ;
+char ans[1000] ={  "no"  };char ans1[1000] , taglia[1000] ;float   risultato =   sommac( a, x, b, taglia);
+   stampa( "la somma  incrementata  è " ); 
 printf("%s\n", taglia);
   stampa( " ed è pari a " ); 
 printf("%f\n", risultato);
-printf("vuoi continuare? (1/si 0/no)\n");
-scanf("%d",&ans);
- while(  ans== 1  ){
- printf("inserisci un intero:\n");
+printf("vuoi continuare? (si/no) - inserisci due volte la risposta\n");
+scanf("%s %s",ans,ans1);
+ while( strcmp( ans,  "si" ) == 0 ){
+ printf( "inserisci un intero:\n");
 scanf("%d",&a);
-printf("inserisci un reale:\n");
+printf( "inserisci un reale:\n");
 scanf("%f",&b);
  risultato=  sommac( a, x, b, taglia);
   stampa( "la somma  incrementata  è " ); 
 printf("%s\n", taglia);
   stampa( " ed è pari a " ); 
 printf("%f\n", risultato);
-printf("vuoi continuare? (1/si 0/no):\n");
-scanf("%d",&ans);
+printf( "vuoi continuare? (si/no):\n");
+scanf("%s",ans);
 
 }
  

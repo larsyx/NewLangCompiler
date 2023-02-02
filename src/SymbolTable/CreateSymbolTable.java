@@ -214,6 +214,8 @@ public class CreateSymbolTable implements Visitor {
     }
 
     public Object visit(ReadOp e) throws SemanticErrorException {
+        if(e.string_const!=null)
+            e.string_const.accept(this);
         e.idList.accept(this);
         return current;
     }
