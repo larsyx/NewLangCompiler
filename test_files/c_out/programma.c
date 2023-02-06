@@ -17,7 +17,6 @@ printf("opzione 3: prodotto\n");
 printf("opzione 4: divisione\n");
 printf("opzione 5: potenza\n");
 scanf("%d",&opzione);
- opzione=  opzione- 2  ;
  if(    opzione>= 6  ||  opzione< 1    ) {
   opzione=  scegliOpzione();
 
@@ -74,7 +73,7 @@ int   opzione =   scegliOpzione();
 float   risultato;
   risultato=  operazione( opzione);
 printf("Risultato operazione: %f\n", risultato);
-printf("Vuoi fare un'altra operazione? (1:si 0:no): ");
+printf( "Vuoi fare un'altra operazione? (1:si 0:no): \n");
 scanf("%d",&flag);
 
 }
