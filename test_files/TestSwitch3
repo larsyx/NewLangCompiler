@@ -1,0 +1,12 @@
+start:
+def esercizio() : void {  || funzione principale
+
+    integer i;
+    switch(i)
+        2: ("due")-->; stop;
+        3: ("tre")-->; stop;
+    end switch
+
+
+    return;
+}

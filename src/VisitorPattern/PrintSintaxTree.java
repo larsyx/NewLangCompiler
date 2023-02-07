@@ -483,4 +483,20 @@ public class PrintSintaxTree implements Visitor{
         return str;
     }
 
+    @Override
+    public Object visit(SwitchStatOp e) throws SemanticErrorException {
+        String str ="<SwitchStatOp> \n";
+
+        str += "<Id>" + e.id.attrib + "</Id>";
+        str += "<Case>" + e.c1.accept(this) + "</Case>";
+        str += e.st1.accept(this);
+        str += "<Case>" + e.c2.accept(this) + "</Case>";
+        str += e.st2.accept(this);
+        str += "<Case>" + e.c3.accept(this) + "</Case>";
+        str += e.st3.accept(this);
+
+        str += "</SwitchStatOp> \n";
+        return str;
+    }
+
 }

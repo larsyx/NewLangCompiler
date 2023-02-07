@@ -93,7 +93,9 @@ ne = "!=" | "<>"
     "and"   { return new Symbol(sym.AND); }
     "or"    { return new Symbol(sym.OR); }
     "not"   { return new Symbol(sym.NOT); }
-
+    "switch" {return new Symbol(sym.SWITCH);}
+    "stop"  {return new Symbol(sym.STOP);}
+    "end"   {return new Symbol(sym.END);}
     {id}    { return new Symbol(sym.ID, new Identifier(yytext())); }
     {whitespace} {}
     [^]           { throw new Error("\n\nIllegal character < "+ yytext()+" >\n"); }

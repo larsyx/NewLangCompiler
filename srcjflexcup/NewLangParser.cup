@@ -24,6 +24,7 @@ terminal Real_const REAL_CONST;
 terminal void VOID;
 terminal Integer_const INTEGER_CONST;
 terminal Char_const CHAR_CONST;
+terminal SWITCH, STOP, END;
 
 nonterminal ProgramOp Program;
 nonterminal FunOp FunDecl, MainFunDecl;
@@ -49,6 +50,7 @@ nonterminal FunCallOp FunCall;
 nonterminal ExpressionList ExprList;
 nonterminal IdentifierList IdList;
 nonterminal Const Const;
+nonterminal SwitchStatOp SwitchStat;
 
 
 precedence left PLUS, MINUS, STR_CONCAT; 
@@ -58,7 +60,7 @@ precedence left AND;
 precedence left NOT;
 precedence left NE, LT, LE, GT, GE , EQ;
 precedence right POW;
-precedence nonassoc FOR, IF, WHILE, LPAR, RETURN, ID;
+precedence nonassoc FOR, IF, WHILE, LPAR, RETURN, ID, SWITCH;
 
 Program ::= DeclList:d1 MainFunDecl:m DeclList:d2 {: RESULT = new ProgramOp(d1,m,d2); :}
 ;
@@ -136,6 +138,7 @@ Stat ::= IfStat:i                       {: RESULT = i; :}
             | WriteStat:ws SEMI         {: RESULT = ws; :}
             | AssignStat:as SEMI        {: RESULT = as; :}
             | WhileStat:ws              {: RESULT = ws; :}
+            | SwitchStat: ws            {: RESULT = ws; :}
             | FunCall:fc SEMI           {: RESULT = fc; :}
             | RETURN Expr:e SEMI        {: RESULT = new ReturnOp(e); :}
             | RETURN SEMI               {: RESULT = new ReturnOp(); :}
@@ -158,6 +161,9 @@ ForStat ::= FOR ID:id ASSIGN INTEGER_CONST:i1 TO INTEGER_CONST:i2 LOOP Body:b   
 
 ReadStat ::=  IdList:il READ           {: RESULT = new ReadOp(il); :}
             | IdList:il READ STRING_CONST:s {:RESULT = new ReadOp(il,s); :}
+;
+
+SwitchStat ::= SWITCH LPAR ID:id RPAR Const:c1 COLON StatList:st1 STOP SEMI Const:c2 COLON StatList:st2 STOP SEMI Const:c3 COLON StatList:st3 STOP SEMI END SWITCH {: RESULT = new SwitchStatOp(id,c1,st1,c2,st2,c3,st3);:}
 ;
 
 IdList ::= ID:i                         {: RESULT = new IdentifierList(i); :}

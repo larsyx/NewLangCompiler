@@ -253,7 +253,7 @@ public class TypeChecking implements Visitor {
     public Object visit(AddOp e) throws SemanticErrorException {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
-
+        e.setType_node(OperatorsTables.opt(OperatorsTables.PLUS, left, right));
         return OperatorsTables.opt(OperatorsTables.PLUS, left, right);
     }
 
@@ -261,7 +261,7 @@ public class TypeChecking implements Visitor {
     public Object visit(AndOp e) throws SemanticErrorException {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
-
+        e.setType_node(OperatorsTables.opt(OperatorsTables.AND, left, right));
         return OperatorsTables.opt(OperatorsTables.AND, left, right);
     }
 
@@ -274,7 +274,7 @@ public class TypeChecking implements Visitor {
     public Object visit(DiffOp e) throws SemanticErrorException {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
-
+        e.setType_node(OperatorsTables.opt(OperatorsTables.MINUS, left, right));
         return OperatorsTables.opt(OperatorsTables.MINUS, left, right);
     }
 
@@ -283,6 +283,7 @@ public class TypeChecking implements Visitor {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
 
+        e.setType_node(OperatorsTables.opt(OperatorsTables.DIV, left, right));
         return OperatorsTables.opt(OperatorsTables.DIV, left, right);
     }
 
@@ -305,7 +306,7 @@ public class TypeChecking implements Visitor {
     public Object visit(GEOp e) throws SemanticErrorException {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
-
+        e.setType_node(OperatorsTables.opt(OperatorsTables.GE, left, right));
         return OperatorsTables.opt(OperatorsTables.GE, left, right);
     }
 
@@ -314,6 +315,7 @@ public class TypeChecking implements Visitor {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
 
+        e.setType_node(OperatorsTables.opt(OperatorsTables.GT, left, right));
         return OperatorsTables.opt(OperatorsTables.GT, left, right);
     }
 
@@ -332,6 +334,7 @@ public class TypeChecking implements Visitor {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
 
+        e.setType_node(OperatorsTables.opt(OperatorsTables.LE, left, right));
         return OperatorsTables.opt(OperatorsTables.LE, left, right);
     }
 
@@ -340,6 +343,7 @@ public class TypeChecking implements Visitor {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
 
+        e.setType_node(OperatorsTables.opt(OperatorsTables.LT, left, right));
         return OperatorsTables.opt(OperatorsTables.LT, left, right);
     }
 
@@ -348,6 +352,7 @@ public class TypeChecking implements Visitor {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
 
+        e.setType_node(OperatorsTables.opt(OperatorsTables.TIMES, left, right));
         return OperatorsTables.opt(OperatorsTables.TIMES, left, right);
     }
 
@@ -356,6 +361,7 @@ public class TypeChecking implements Visitor {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
 
+        e.setType_node(OperatorsTables.opt(OperatorsTables.NE, left, right));
         return OperatorsTables.opt(OperatorsTables.NE, left, right);
     }
 
@@ -363,6 +369,7 @@ public class TypeChecking implements Visitor {
     public Object visit(NotOp e) throws SemanticErrorException {
         String exp = (String) e.exp.accept(this);
 
+        e.setType_node(OperatorsTables.opt(OperatorsTables.NOT, exp));
         return OperatorsTables.opt(OperatorsTables.NOT, exp);
     }
 
@@ -371,6 +378,7 @@ public class TypeChecking implements Visitor {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
 
+        e.setType_node(OperatorsTables.opt(OperatorsTables.OR, left, right));
         return OperatorsTables.opt(OperatorsTables.OR, left, right);
     }
 
@@ -379,6 +387,7 @@ public class TypeChecking implements Visitor {
         String left = (String) e.left.accept(this);
         String right = (String) e.right.accept(this);
 
+        e.setType_node(OperatorsTables.opt(OperatorsTables.POW, left, right));
         return OperatorsTables.opt(OperatorsTables.POW, left, right);
     }
 
@@ -408,7 +417,7 @@ public class TypeChecking implements Visitor {
     @Override
     public Object visit(UminusOp e) throws SemanticErrorException {
         String exp = (String) e.exp.accept(this);
-
+        e.setType_node(exp);
         return OperatorsTables.opt(OperatorsTables.MINUS, exp);
     }
 
@@ -487,6 +496,40 @@ public class TypeChecking implements Visitor {
         return NOTYPE;
     }
 
+    @Override
+    public Object visit(SwitchStatOp e) throws SemanticErrorException {
+        String typeId = (String) e.id.accept(this);
+        if(!typeId.equals(e.c1.accept(this))){
+            e.setType_node(ERROR);
+            throw new SemanticErrorException("Errore "+ e.id.attrib +" e c1 sono di tipi differenti in Switch");
+        }
+        if(!e.st1.accept(this).equals(NOTYPE)){
+            e.setType_node(ERROR);
+            throw new SemanticErrorException("Errore statement in Switch");
+        }
+        if(!typeId.equals(e.c2.accept(this))){
+            e.setType_node(ERROR);
+            throw new SemanticErrorException("Errore "+ e.id.attrib +" e c2 sono di tipi differenti in Switch");
+        }
+        if(!e.st2.accept(this).equals(NOTYPE)){
+            e.setType_node(ERROR);
+            throw new SemanticErrorException("Errore statement in Switch");
+        }
+        if(!typeId.equals(e.c3.accept(this))){
+            e.setType_node(ERROR);
+            throw new SemanticErrorException("Errore "+ e.id.attrib +" e c3 sono di tipi differenti in Switch");
+        }
+        if(!e.st3.accept(this).equals(NOTYPE)){
+            e.setType_node(ERROR);
+            throw new SemanticErrorException("Errore statement in Switch");
+        }
+
+
+
+
+        e.setType_node(NOTYPE);
+        return NOTYPE;
+    }
 
 
     public void checkFunCallParam() throws SemanticErrorException {

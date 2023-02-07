@@ -465,4 +465,17 @@ public class CreateSymbolTable implements Visitor {
         return current;
     }
 
+    @Override
+    public Object visit(SwitchStatOp e) throws SemanticErrorException {
+        e.id.accept(this);
+        e.c1.accept(this);
+        e.st1.accept(this);
+        e.c2.accept(this);
+        e.st2.accept(this);
+        e.c3.accept(this);
+        e.st3.accept(this);
+
+        return current;
+    }
+
 }

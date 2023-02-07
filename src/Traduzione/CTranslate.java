@@ -850,6 +850,24 @@ public class CTranslate implements Visitor {
         return str;
     }
 
+    @Override
+    public Object visit(SwitchStatOp e) throws SemanticErrorException {
+        String str = "\n ";
+        str += "switch(" + e.id.accept(this) + "){\n";
+        str += "case " + e.c1.accept(this) +": ";
+        str += e.st1.accept(this);
+        str+= " break;\n";
+        str += "case " + e.c2.accept(this) +": ";
+        str += e.st2.accept(this);
+        str+= " break;\n";
+        str += "case " + e.c3.accept(this) +": ";
+        str += e.st3.accept(this);
+        str+= " break;";
+
+        str += "\n}\n";
+        return str;
+    }
+
 
     private String convertiTipi(String tipo){
         switch (tipo){

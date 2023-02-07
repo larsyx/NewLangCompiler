@@ -1,8 +1,3 @@
-
-
-var c << 1;
-
-
 start:
 def esercizio() : void {  || funzione principale
 
@@ -17,6 +12,3 @@ def esercizio() : void {  || funzione principale
 
     return;
 }
-
-
-

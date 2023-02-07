@@ -101,4 +101,6 @@ public interface Visitor {
     Object visit(IdentifierList e) throws SemanticErrorException;
     Object visit(ExpressionList e) throws SemanticErrorException;
 
+    Object visit(SwitchStatOp e) throws SemanticErrorException;
+
 }

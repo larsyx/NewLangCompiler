@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 void main ();
-int   c =  1 ;
+
 
 
 

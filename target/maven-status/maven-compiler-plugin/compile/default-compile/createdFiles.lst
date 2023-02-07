@@ -12,6 +12,7 @@ VisitorPattern\Stat\IfOp.class
 VisitorPattern\Program\VarDeclList.class
 Parser\parser$CUP$parser$actions.class
 VisitorPattern\Expressions\LTOp.class
+VisitorPattern\Stat\SwitchStatOp.class
 VisitorPattern\Expressions\NEOp.class
 VisitorPattern\Program\IdInit\InitList.class
 VisitorPattern\Program\ProgramOp.class
