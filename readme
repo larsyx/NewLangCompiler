@@ -1,6 +1,3 @@
-PROGETTO
-    - https://gitlab.com/g4660/compilatori-a.a.-2022_23/newlang-semancgen-es5/moscato_es5.git
-
 AVVIO
     - Per compilare il programma e produrre il file scritto in C sono stati creati diversi test da compilare ed eseguire da intellij;
     - Il file C generato è presente nella directory test_files/c_out;
